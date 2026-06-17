@@ -126,7 +126,9 @@ describe('ActivateSkillTool', () => {
     expect(result.llmContent).toContain('</available_resources>');
     expect(result.llmContent).toContain('</activated_skill>');
     expect(result.returnDisplay).toContain('Skill **test-skill** activated');
-    expect(result.returnDisplay).toContain('Mock folder structure');
+    // The folder tree is provided to the model (llmContent) but kept out of the
+    // concise UI display.
+    expect(result.returnDisplay).not.toContain('Mock folder structure');
   });
 
   it('should throw error if skill is not in enum', async () => {

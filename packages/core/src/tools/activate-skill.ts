@@ -149,7 +149,9 @@ ${folderStructure}`,
     ${folderStructure}
   </available_resources>
 </activated_skill>`,
-      returnDisplay: `Skill **${skillName}** activated. Resources loaded from \`${path.dirname(skill.location)}\`:\n\n${folderStructure}`,
+      // Keep the UI concise — the full resource tree is still provided to the
+      // model via llmContent above, but it's noise to render in the transcript.
+      returnDisplay: `Skill **${skillName}** activated.`,
     };
   }
 }

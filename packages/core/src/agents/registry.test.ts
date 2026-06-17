@@ -276,6 +276,9 @@ describe('AgentRegistry', () => {
             codebase_investigator: { enabled: false },
             cli_help: { enabled: false },
             generalist: { enabled: false },
+            // Built-in only when `codelogician-lite` is installed; disabling it
+            // here keeps this assertion deterministic across environments.
+            imandra: { enabled: false },
           },
         },
       });

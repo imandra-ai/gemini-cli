@@ -18,6 +18,9 @@ import { loadAgentsFromDirectory } from './agentLoader.js';
 import { CodebaseInvestigatorAgent } from './codebase-investigator.js';
 import { CliHelpAgent } from './cli-help-agent.js';
 import { GeneralistAgent } from './generalist-agent.js';
+import { ImandraAgent } from './imandra-agent.js';
+import { isBinaryAvailable } from '../utils/binaryCheck.js';
+import { CODELOGICIAN_LITE_BINARY } from '../tools/codelogician.js';
 import { BrowserAgentDefinition } from './browser/browserAgentDefinition.js';
 import { AgentTool } from './agent-tool.js';
 import { A2AAuthProviderFactory } from './auth-provider/factory.js';
@@ -285,6 +288,13 @@ export class AgentRegistry {
     this.registerLocalAgent(CodebaseInvestigatorAgent(this.config));
     this.registerLocalAgent(CliHelpAgent(this.config));
     this.registerLocalAgent(GeneralistAgent(this.config));
+
+    // The Imandra agent is only useful when the `codelogician-lite` CLI is
+    // installed; register it conditionally so it never surfaces when it cannot
+    // run.
+    if (isBinaryAvailable(CODELOGICIAN_LITE_BINARY)) {
+      this.registerLocalAgent(ImandraAgent(this.config));
+    }
 
     // Register the browser agent if enabled in settings.
     // Tools are configured dynamically at invocation time via browserAgentFactory.

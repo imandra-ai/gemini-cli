@@ -39,6 +39,11 @@ import { GlobTool } from '../tools/glob.js';
 import { ActivateSkillTool } from '../tools/activate-skill.js';
 import { EditTool } from '../tools/edit.js';
 import { ShellTool } from '../tools/shell.js';
+import {
+  CodelogicianTool,
+  CODELOGICIAN_LITE_BINARY,
+} from '../tools/codelogician.js';
+import { isBinaryAvailable } from '../utils/binaryCheck.js';
 import { WriteFileTool } from '../tools/write-file.js';
 import { WebFetchTool } from '../tools/web-fetch.js';
 import {
@@ -4009,6 +4014,14 @@ export class Config implements McpContext, AgentLoopContext {
     maybeRegister(WebSearchTool, () =>
       registry.registerTool(new WebSearchTool(this, this.messageBus)),
     );
+    // The Imandra/CodeLogician tool is only useful when the `codelogician-lite`
+    // CLI is installed, so we register it conditionally to avoid surfacing a
+    // tool that can never succeed.
+    if (isBinaryAvailable(CODELOGICIAN_LITE_BINARY)) {
+      maybeRegister(CodelogicianTool, () =>
+        registry.registerTool(new CodelogicianTool(this, this.messageBus)),
+      );
+    }
     maybeRegister(AskUserTool, () =>
       registry.registerTool(new AskUserTool(this.messageBus)),
     );

@@ -136,3 +136,14 @@ export const COMPLETE_TASK_DISPLAY_NAME = 'Complete Task';
 // -- MCP Resources --
 export const READ_MCP_RESOURCE_TOOL_NAME = 'read_mcp_resource';
 export const LIST_MCP_RESOURCES_TOOL_NAME = 'list_mcp_resources';
+
+// -- codelogician (Imandra / CodeLogician) --
+export const CODELOGICIAN_TOOL_NAME = 'codelogician';
+export const CODELOGICIAN_PARAM_OPERATION = 'operation';
+export const CODELOGICIAN_PARAM_FILE = 'file';
+export const CODELOGICIAN_PARAM_INDEX = 'index';
+export const CODELOGICIAN_PARAM_CHECK_ALL = 'check_all';
+export const CODELOGICIAN_PARAM_WITH_VGS = 'with_vgs';
+export const CODELOGICIAN_PARAM_WITH_DECOMPS = 'with_decomps';
+export const CODELOGICIAN_PARAM_FUNCTION = 'function';
+export const CODELOGICIAN_PARAM_LANG = 'lang';

@@ -270,14 +270,30 @@ class VisualizeRegionsInvocation extends BaseToolInvocation<
     super(params, messageBus, toolName, toolDisplayName);
   }
 
-  override async shouldConfirmExecute(
-    _abortSignal: AbortSignal,
-  ): Promise<ToolCallConfirmationDetails | false> {
-    return false;
-  }
-
   getDescription(): string {
     return `Visualizing region decomposition of ${this.params.file}`;
+  }
+
+  // Always ask before popping open a browser window. With no auto-allow policy
+  // for this tool, the default `ask_user` decision routes here, so the user is
+  // prompted each time region decomposition wants to show its diagram.
+  protected override async getConfirmationDetails(
+    _abortSignal: AbortSignal,
+  ): Promise<ToolCallConfirmationDetails | false> {
+    if (!this.messageBus) {
+      return false;
+    }
+    const target = this.params.function
+      ? `\`${this.params.function}\``
+      : `\`${this.params.file}\``;
+    return {
+      type: 'info',
+      title: 'View region decomposition?',
+      prompt: `Open an interactive Voronoi diagram of the regions of ${target} in your browser?`,
+      onConfirm: async () => {
+        // Policy updates handled centrally by the scheduler.
+      },
+    };
   }
 
   async execute({ abortSignal }: ExecuteOptions): Promise<ToolResult> {

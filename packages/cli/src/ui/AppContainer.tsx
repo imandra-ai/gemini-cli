@@ -2361,26 +2361,11 @@ Logging in with Google... Restarting Gemini CLI to continue.
   }, []);
 
   useEffect(() => {
-    let isMounted = true;
-
-    const fetchBannerTexts = async () => {
-      const [defaultBanner, warningBanner] = await Promise.all([
-        config.getBannerTextNoCapacityIssues(),
-        config.getBannerTextCapacityIssues(),
-      ]);
-
-      if (isMounted) {
-        setDefaultBannerText(defaultBanner);
-        setWarningBannerText(warningBanner);
-        setBannerVisible(true);
-      }
-    };
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    fetchBannerTexts();
-
-    return () => {
-      isMounted = false;
-    };
+    // CodeLogician fork: suppress the upstream Gemini notices (e.g. the
+    // "migrate to Antigravity CLI" / capacity boxes) shown at startup.
+    setDefaultBannerText('');
+    setWarningBannerText('');
+    setBannerVisible(false);
   }, [config, refreshStatic]);
 
   const inputState = useMemo(

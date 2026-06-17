@@ -57,7 +57,7 @@ const f = process.argv[1];
 const msg =
   `You just edited \`${f}\`. If this change affects program logic or behavior ` +
   `(algorithms, state machines, arithmetic/money, parsing, access control, ` +
-  `invariants, edge-case handling), you MUST delegate to the \`imandra\` subagent ` +
+  `invariants, edge-case handling), you MUST delegate to the \`formalreasoning\` subagent ` +
   `NOW — before writing tests, before running the code, and before concluding ` +
   `this task. Do NOT ask the user whether to use it; just invoke it. Use it to ` +
   `(1) UNDERSTAND what the code you just wrote actually does via region ` +

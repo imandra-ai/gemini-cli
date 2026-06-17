@@ -97,21 +97,21 @@ powerful tool for developers.
 
 ## Reasoning about code with Imandra / CodeLogician
 
-This project ships an `imandra` subagent (backed by the `codelogician` tool /
-`codelogician-lite` CLI). It reasons about code mathematically and is valuable
-for **two** things: _understanding_ what code does and _verifying_ that it is
-correct.
+This project ships an `formalreasoning` subagent (backed by the `codelogician`
+tool / `codelogician-lite` CLI). It reasons about code mathematically and is
+valuable for **two** things: _understanding_ what code does and _verifying_ that
+it is correct.
 
 **This is a hard requirement, not a suggestion:** whenever you write or modify
 code that contains non-trivial program logic, you **MUST** delegate to the
-`imandra` subagent before you consider the task done. Do **not** ask the user
-for permission first, and do **not** stop at running the code or writing
-hand-rolled tests — invoke `imandra` as a normal step of the work.
+`formalreasoning` subagent before you consider the task done. Do **not** ask the
+user for permission first, and do **not** stop at running the code or writing
+hand-rolled tests — invoke `formalreasoning` as a normal step of the work.
 
 - **Region decomposition for understanding & tests (use this generously).**
   CodeLogician's region decomposition enumerates a function's disjoint
   behavioral cases — each with its input constraints, simplified output, and an
-  example input. Delegate to the `imandra` subagent to:
+  example input. Delegate to the `formalreasoning` subagent to:
   - **Understand non-trivial logic, including code you just generated** — read
     the regions to confirm what the code _actually_ does, branch by branch,
     instead of trusting a statistical read. This routinely surfaces unhandled
@@ -129,7 +129,7 @@ hand-rolled tests — invoke `imandra` as a normal step of the work.
 - **Don't over-invoke within that rule.** One focused decomposition/verification
   on the function that actually matters beats blanket runs; if a change is
   trivial or has no checkable behavior, skip it. But when real logic is
-  involved, running `imandra` is mandatory, not optional.
+  involved, running `formalreasoning` is mandatory, not optional.
 - The `AfterTool` hook (`.gemini/hooks/imandra-nudge.sh`) will remind you after
-  source edits; treat that reminder as a direct instruction to invoke `imandra`
-  on the logic you just changed.
+  source edits; treat that reminder as a direct instruction to invoke
+  `formalreasoning` on the logic you just changed.

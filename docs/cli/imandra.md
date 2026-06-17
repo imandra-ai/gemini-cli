@@ -12,10 +12,10 @@ regions, and to _generate_ high-coverage tests from those regions.
 
 Two pieces are added to the CLI:
 
-- **The `imandra` subagent** — an "Imandra coding agent" that autoformalizes the
-  relevant parts of your source code into IML (Imandra Modeling Language),
-  drives the analysis, and maps the results back to your code with concrete,
-  source-level recommendations.
+- **The `formalreasoning` subagent** — an "Imandra coding agent" that
+  autoformalizes the relevant parts of your source code into IML (Imandra
+  Modeling Language), drives the analysis, and maps the results back to your
+  code with concrete, source-level recommendations.
 - **The `codelogician` tool** — a structured wrapper around the
   `codelogician-lite` CLI that talks to the ImandraX engine. It exposes the
   operations `check`, `list_vg` / `check_vg`, `list_decomp` / `check_decomp`,
@@ -23,7 +23,8 @@ Two pieces are added to the CLI:
 
 ## When it activates automatically
 
-The main agent delegates to the `imandra` subagent when it would add value:
+The main agent delegates to the `formalreasoning` subagent when it would add
+value:
 
 - **Code comprehension** — region decomposition enumerates a function's disjoint
   behavioral cases (constraints + output + example input per region), giving a
@@ -37,10 +38,10 @@ The main agent delegates to the `imandra` subagent when it would add value:
 - **Proactively after writing/editing critical code** — to confirm behavior and
   catch edge cases that statistical reasoning would miss.
 
-You can also invoke it explicitly with `@imandra`, for example:
+You can also invoke it explicitly with `@formalreasoning`, for example:
 
 ```
-@imandra Verify that `applyDiscount` never produces a negative total, and
+@formalreasoning Verify that `applyDiscount` never produces a negative total, and
 decompose its behavior into regions.
 ```
 
@@ -61,9 +62,10 @@ decompose its behavior into regions.
    export IMANDRA_UNI_KEY="<your-key>"   # IMANDRAX_API_KEY also works
    ```
 
-The `imandra` agent and the `codelogician` tool are registered **automatically
-when the `codelogician-lite` binary is found on `PATH`**. If it is not
-installed, neither is surfaced, so users without CodeLogician are unaffected.
+The `formalreasoning` agent and the `codelogician` tool are registered
+**automatically when the `codelogician-lite` binary is found on `PATH`**. If it
+is not installed, neither is surfaced, so users without CodeLogician are
+unaffected.
 
 ## How it works
 
@@ -102,7 +104,7 @@ also disable the subagent explicitly in `settings.json`:
 {
   "agents": {
     "overrides": {
-      "imandra": { "enabled": false }
+      "formalreasoning": { "enabled": false }
     }
   }
 }

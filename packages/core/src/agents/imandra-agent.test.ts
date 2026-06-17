@@ -18,9 +18,9 @@ describe('ImandraAgent', () => {
 
   it('should have the correct agent definition', () => {
     const agent = ImandraAgent(config);
-    expect(agent.name).toBe('imandra');
+    expect(agent.name).toBe('formalreasoning');
     expect(agent.kind).toBe('local');
-    expect(agent.displayName).toBe('Imandra Agent');
+    expect(agent.displayName).toBe('Formal Reasoning Agent');
     expect(agent.description).toBeDefined();
 
     const inputSchema =

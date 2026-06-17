@@ -310,9 +310,9 @@ To use the browser agent in a Docker sandbox:
    GEMINI_SANDBOX=docker SANDBOX_PORTS=9222 gemini
    ```
 
-### Imandra Agent
+### Formal Reasoning Agent
 
-- **Name:** `imandra`
+- **Name:** `formalreasoning`
 - **Purpose:** Reason about code using
   [Imandra / CodeLogician](https://www.codelogician.dev) — both to
   **understand** it and to **verify** it. It autoformalizes source code into IML
@@ -325,7 +325,7 @@ To use the browser agent in a Docker sandbox:
   "Generate high-coverage tests for `parseRange`", "Verify that this balance can
   never go negative", or proactively after writing/editing critical/logic-heavy
   code to confirm behavior and catch edge cases. The main agent may delegate to
-  it automatically; you can also invoke it explicitly with `@imandra`.
+  it automatically; you can also invoke it explicitly with `@formalreasoning`.
 - **Prerequisites:** The `codelogician-lite` CLI must be installed
   (`uv tool install codelogician` or `pip install codelogician`) and an Imandra
   Universe API key must be available as `IMANDRA_UNI_KEY` (a free plan is

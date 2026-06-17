@@ -278,7 +278,7 @@ describe('AgentRegistry', () => {
             generalist: { enabled: false },
             // Built-in only when `codelogician-lite` is installed; disabling it
             // here keeps this assertion deterministic across environments.
-            imandra: { enabled: false },
+            formalreasoning: { enabled: false },
           },
         },
       });

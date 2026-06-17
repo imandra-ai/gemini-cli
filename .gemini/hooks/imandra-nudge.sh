@@ -35,18 +35,20 @@ emit_noop() { printf '%s' '{}'; exit 0; }
 # Nothing to do if we could not determine the edited file.
 [ -n "$file" ] || emit_noop
 
-# Skip the agent's own IML models and anything under .imandra/ (prevents loops),
-# plus tests/snapshots which are not the thing we want to formalize.
+# Skip the formalreasoning subagent's own IML workspace (.imandra/, prevents
+# loops) and tests/snapshots, which are not the thing we want to formalize.
 case "$file" in
-  *.iml | */.imandra/* | *.test.* | *.spec.* | *.snap | */__snapshots__/*)
+  .imandra/* | */.imandra/* | *.test.* | *.spec.* | *.snap | */__snapshots__/*)
     emit_noop
     ;;
 esac
 
-# Only consider files that can actually contain program logic. Markup, styles,
-# config, data and docs (the "is this color prettier" category) are skipped.
+# Classify the file: hand-written IML gets an IML-specific nudge; program-logic
+# source gets the formalize/verify nudge; everything else (markup, styles,
+# config, docs) is skipped.
 case "$file" in
-  *.ts | *.tsx | *.js | *.jsx | *.mjs | *.cjs | *.py | *.ml | *.mli | *.go | *.rs | *.java | *.c | *.cc | *.cpp | *.h | *.hpp | *.scala | *.kt | *.rb) ;;
+  *.iml) kind="iml" ;;
+  *.ts | *.tsx | *.js | *.jsx | *.mjs | *.cjs | *.py | *.ml | *.mli | *.go | *.rs | *.java | *.c | *.cc | *.cpp | *.h | *.hpp | *.scala | *.kt | *.rb) kind="code" ;;
   *) emit_noop ;;
 esac
 
@@ -64,14 +66,20 @@ mkdir -p "$marker_dir" 2>/dev/null || true
 # ONCE, after the logic is settled — not on every intermediate edit.
 node -e '
 const f = process.argv[1];
-const msg =
-  `You edited \`${f}\`. Once you have finished a non-trivial piece of program ` +
-  `logic here (algorithms, state machines, arithmetic/money, parsing, access ` +
-  `control, invariants, edge cases), delegate ONCE to the \`formalreasoning\` ` +
-  `subagent to understand it via region decomposition and verify the properties ` +
-  `that matter (it returns concrete counterexamples). Do this a single time, ` +
-  `after the logic has settled — not after every intermediate edit, and not for ` +
-  `trivial changes. Skip it entirely for cosmetic/subjective work (styling, ` +
-  `colors, copy, formatting, comments, logging).`;
+const kind = process.argv[2];
+const msg = kind === "iml"
+  ? `You edited the IML file \`${f}\`. Hand-written IML must be checked: admit it ` +
+    `with the \`codelogician\` tool (operation \`check\`) and fix any errors, then ` +
+    `run \`check_vg\` / \`check_decomp\` for any goals or decompositions involved. ` +
+    `For authoring or verifying IML, prefer delegating to the \`formalreasoning\` ` +
+    `subagent. Do not leave IML unadmitted.`
+  : `You edited \`${f}\`. Once you have finished a non-trivial piece of program ` +
+    `logic here (algorithms, state machines, arithmetic/money, parsing, access ` +
+    `control, invariants, edge cases), delegate ONCE to the \`formalreasoning\` ` +
+    `subagent to understand it via region decomposition and verify the properties ` +
+    `that matter (it returns concrete counterexamples). Do this a single time, ` +
+    `after the logic has settled — not after every intermediate edit, and not for ` +
+    `trivial changes. Skip it entirely for cosmetic/subjective work (styling, ` +
+    `colors, copy, formatting, comments, logging).`;
 process.stdout.write(JSON.stringify({ hookSpecificOutput: { additionalContext: msg } }));
-' "$file"
+' "$file" "$kind"

@@ -436,7 +436,9 @@ export class CodelogicianTool extends BaseDeclarativeTool<
         'Type-check (`check`), formally verify properties and get concrete ' +
         'counterexamples (`check_vg`), perform region decomposition to enumerate ' +
         'behavioral cases (`check_decomp`), and generate tests from regions ' +
-        '(`gen_test`). Operates on `.iml` files via the `codelogician-lite` CLI.',
+        '(`gen_test`). Operates on `.iml` files via the `codelogician-lite` CLI. ' +
+        'Use this whenever you author or edit IML to admit/verify it — never leave ' +
+        'hand-written IML unchecked.',
       Kind.Execute,
       CODELOGICIAN_PARAMETER_SCHEMA,
       messageBus,

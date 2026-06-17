@@ -99,8 +99,10 @@ export const ImandraAgent = (
       'map; (2) you need high-coverage tests: it generates test cases directly from those ' +
       'regions; (3) code has invariants or properties worth formally verifying — it ' +
       'autoformalizes the code into IML and proves the property or returns a concrete ' +
-      'counterexample; or (4) proactively after writing/editing critical or logic-heavy code, ' +
-      'to confirm its behavior and catch edge cases statistical reasoning would miss. ' +
+      'counterexample; (4) proactively after writing/editing critical or logic-heavy code, ' +
+      'to confirm its behavior and catch edge cases statistical reasoning would miss; or ' +
+      '(5) the user asks to write, edit, debug, verify, or decompose IML / ImandraX code ' +
+      'directly (this agent is the IML specialist — never leave hand-written IML unchecked). ' +
       'Returns behavioral regions, generated tests, proved/refuted properties with ' +
       'counterexamples, and source-level recommendations.',
     inputConfig: {

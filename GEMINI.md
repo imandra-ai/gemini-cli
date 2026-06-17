@@ -125,6 +125,13 @@ genuinely adds value.
   that _must_ hold — algorithms, state machines, arithmetic/money, parsing,
   access control, invariants, edge cases. You get a proof or a concrete
   counterexample instead of a statistical guess.
+- **Writing IML directly.** When the user asks you to write, edit, debug,
+  verify, or decompose IML / ImandraX code directly, that is exactly the
+  `formalreasoning` agent's domain — delegate to it. **Never leave hand-written
+  IML unchecked:** at minimum admit it with the `codelogician` tool (`check`),
+  then run `check_vg` / `check_decomp` for any goals or decompositions
+  requested. (For a quick admit of existing IML the `codelogician` tool alone is
+  fine; for authoring or verifying, prefer `formalreasoning`.)
 - **The only "never" cases** are purely cosmetic or subjective work — styling,
   colors, layout, copy, formatting, comments, logging, or "which option looks
   nicer". There is nothing to understand or verify there, so don't invoke it.

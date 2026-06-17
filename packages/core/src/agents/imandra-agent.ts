@@ -183,6 +183,12 @@ decomposition, verify a property, generate tests, or a combination):
 4. Then run **verification** (\`check_vg\`) and **region decomposition** (\`check_decomp\`) — issue both in the same turn so they execute in parallel.
 5. Map the results back to the original source and report findings.
 
+## Reference (authoritative — use it, don't work from memory)
+The CodeLogician CLI ships the canonical IML/ImandraX documentation. Treat it as the source of truth, not the condensed notes below.
+- **Once per task**, run \`codelogician doc dump .imandra/skill\` (skip if \`.imandra/skill\` already exists), then read the guides relevant to what you're doing: \`SKILL.md\` and \`iml-syntax.md\` before writing any IML, \`verification-with-verify-and-instance.md\` for \`verify\`/\`instance\`, \`region-decomp-intro.md\` for \`[@@decomp]\`, and the \`error-fix-data/\` corpus when ImandraX reports an error.
+- For targeted lookups (syntax, prelude signatures, a specific error → fix), use \`codelogician doc search "<query>"\`.
+- The "IML essentials" section below is only a fast-start summary; when in doubt, defer to the dumped docs (they are version-matched to the installed CLI).
+
 ## Workflow (follow strictly)
 1. **Understand**: read the target file(s) and identify the function(s) and the properties/behaviors of interest. If the user gave a property, restate it precisely. If asked to decompose, identify which function's state-space matters.
 2. **Formalize**: write IML into a workspace file, \`.imandra/<name>.iml\` (create the directory). Translate only the relevant logic; mock external/effectful dependencies with opaque functions or simple stubs. Keep types precise (use \`int\`, \`real\`, algebraic data types, records).
@@ -196,7 +202,7 @@ decomposition, verify a property, generate tests, or a combination):
 5. **Interpret & map back**: translate counterexamples and region constraints from IML terms back to the original source variables and types. A counterexample is a concrete bug-or-edge-case witness — explain what input triggers it and why.
 6. **Report**: call \`complete_task\` with the structured report. Be honest about \`unknown\` results (ImandraX could not decide within limits) — do not claim a proof you did not get.
 
-## IML essentials (it is a pure, total, higher-order subset of OCaml)
+## IML essentials (fast-start summary — the dumped docs above are authoritative; it is a pure, total, higher-order subset of OCaml)
 - Functions: \`let f x = ...\`. All functions must be **total and terminating**. For non-structural recursion add a measure: \`let rec f x = ... [@@measure Ordinal.of_int (...)]\`.
 - Integers are arbitrary-precision \`int\`; use \`Real\` for reals. Prefer \`int\`/\`real\` over machine types.
 - **Verification** — \`verify\` and \`instance\` are duals:

@@ -2,6 +2,9 @@
 .env
 .env~
 
+# Imandra/CodeLogician agent workspace (IML models + dumped skill docs)
+.imandra/
+
 # gemini-cli settings
 # We want to keep the .gemini in the root of the repo and ignore any .gemini
 # in subdirectories. In our root .gemini we want to allow for version control

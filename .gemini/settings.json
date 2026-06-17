@@ -11,5 +11,21 @@
   },
   "general": {
     "devtools": true
+  },
+  "hooks": {
+    "AfterTool": [
+      {
+        "matcher": "write_file|replace",
+        "hooks": [
+          {
+            "name": "imandra-nudge",
+            "type": "command",
+            "description": "After editing logic-bearing source, prompt the agent to formally check it with Imandra/CodeLogician.",
+            "command": "$GEMINI_PROJECT_DIR/.gemini/hooks/imandra-nudge.sh",
+            "timeout": 5000
+          }
+        ]
+      }
+    ]
   }
 }

@@ -178,6 +178,10 @@
             "label": "Remote subagents",
             "slug": "docs/core/remote-agents"
           },
+          {
+            "label": "Imandra / CodeLogician",
+            "slug": "docs/cli/imandra"
+          },
           { "label": "Rewind", "slug": "docs/cli/rewind" },
           { "label": "Sandboxing", "slug": "docs/cli/sandbox" },
           { "label": "Settings", "slug": "docs/cli/settings" },

@@ -310,6 +310,31 @@ To use the browser agent in a Docker sandbox:
    GEMINI_SANDBOX=docker SANDBOX_PORTS=9222 gemini
    ```
 
+### Imandra Agent
+
+- **Name:** `imandra`
+- **Purpose:** Reason about code using
+  [Imandra / CodeLogician](https://www.codelogician.dev) — both to
+  **understand** it and to **verify** it. It autoformalizes source code into IML
+  (Imandra Modeling Language) and uses the ImandraX engine to perform region
+  decomposition (enumerating a function's disjoint behavioral cases — a precise
+  map of what the code actually does, great for understanding even freshly
+  generated code), generate high-coverage tests from those regions, and prove
+  properties (returning concrete counterexamples when they fail).
+- **When to use:** "Decompose `priceOrder` and show me what it actually does",
+  "Generate high-coverage tests for `parseRange`", "Verify that this balance can
+  never go negative", or proactively after writing/editing critical/logic-heavy
+  code to confirm behavior and catch edge cases. The main agent may delegate to
+  it automatically; you can also invoke it explicitly with `@imandra`.
+- **Prerequisites:** The `codelogician-lite` CLI must be installed
+  (`uv tool install codelogician` or `pip install codelogician`) and an Imandra
+  Universe API key must be available as `IMANDRA_UNI_KEY` (a free plan is
+  available at https://universe.imandra.ai). The agent and its underlying
+  `codelogician` tool are registered automatically **only when the
+  `codelogician-lite` binary is found on `PATH`**.
+- **Configuration:** Enabled by default when the prerequisites are met. See
+  [Imandra / CodeLogician integration](../cli/imandra.md) for details.
+
 ## Creating custom subagents
 
 You can create your own subagents to automate specific workflows or enforce

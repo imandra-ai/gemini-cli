@@ -94,3 +94,42 @@ powerful tool for developers.
 - Documentation is located in the `docs/` directory.
 - Suggest documentation updates when code changes render existing documentation
   obsolete or incomplete.
+
+## Reasoning about code with Imandra / CodeLogician
+
+This project ships an `imandra` subagent (backed by the `codelogician` tool /
+`codelogician-lite` CLI). It reasons about code mathematically and is valuable
+for **two** things: _understanding_ what code does and _verifying_ that it is
+correct.
+
+**This is a hard requirement, not a suggestion:** whenever you write or modify
+code that contains non-trivial program logic, you **MUST** delegate to the
+`imandra` subagent before you consider the task done. Do **not** ask the user
+for permission first, and do **not** stop at running the code or writing
+hand-rolled tests — invoke `imandra` as a normal step of the work.
+
+- **Region decomposition for understanding & tests (use this generously).**
+  CodeLogician's region decomposition enumerates a function's disjoint
+  behavioral cases — each with its input constraints, simplified output, and an
+  example input. Delegate to the `imandra` subagent to:
+  - **Understand non-trivial logic, including code you just generated** — read
+    the regions to confirm what the code _actually_ does, branch by branch,
+    instead of trusting a statistical read. This routinely surfaces unhandled
+    cases.
+  - **Generate high-coverage tests** — derive one test per region (Python /
+    TypeScript) so coverage tracks the real control/data flow, not guessed
+    inputs. Prefer this over hand-written tests for logic-heavy functions.
+- **Verification for correctness.** You MUST also delegate when a change affects
+  logic that _must_ hold — algorithms, state machines, arithmetic/money,
+  parsing, access control, invariants, edge cases. You get a proof or a concrete
+  counterexample instead of a statistical guess.
+- **The only exception** is purely cosmetic or subjective work — styling,
+  colors, layout, copy, formatting, comments, logging, or "which option looks
+  nicer". There is nothing to understand or verify there, so don't invoke it.
+- **Don't over-invoke within that rule.** One focused decomposition/verification
+  on the function that actually matters beats blanket runs; if a change is
+  trivial or has no checkable behavior, skip it. But when real logic is
+  involved, running `imandra` is mandatory, not optional.
+- The `AfterTool` hook (`.gemini/hooks/imandra-nudge.sh`) will remind you after
+  source edits; treat that reminder as a direct instruction to invoke `imandra`
+  on the logic you just changed.

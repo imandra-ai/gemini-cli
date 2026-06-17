@@ -54,15 +54,41 @@ describe('ImandraAgent', () => {
     expect(prompt).toContain('check_decomp');
   });
 
-  it('should format the output report as pretty JSON', () => {
+  it('renders the report plain-first, with formal detail in a labeled appendix', () => {
     const agent = ImandraAgent(config);
     const report = {
-      Summary: 's',
-      ImlModel: '.imandra/x.iml',
-      PropertiesVerified: [],
-      Regions: [],
-      Recommendations: [],
+      PlainSummary: 'Checked the deposit/withdrawal logic for the account.',
+      Findings: [
+        {
+          Issue: 'A negative amount slips past the balance check',
+          Severity: 'bug' as const,
+          Trigger: 'amount = -50',
+          Recommendation: 'Reject amounts below zero',
+        },
+      ],
+      TechnicalDetails: {
+        ImlModel: '.imandra/account.iml',
+        Verified: [
+          {
+            Property: 'balance never negative',
+            Result: 'refuted' as const,
+            Counterexample: 'amount=-50',
+          },
+        ],
+        Regions: [],
+      },
     };
-    expect(agent.processOutput?.(report)).toBe(JSON.stringify(report, null, 2));
+    const out = agent.processOutput?.(report) ?? '';
+    // Plain summary + finding come first, in domain terms.
+    expect(out.startsWith('Checked the deposit/withdrawal logic')).toBe(true);
+    expect(out).toContain('A negative amount slips past the balance check');
+    expect(out).toContain('amount = -50');
+    // Formal detail is present but clearly demoted to a reference section.
+    expect(out).toContain('reference only');
+    expect(out).toContain('.imandra/account.iml');
+    // The plain part precedes the technical part.
+    expect(out.indexOf('Checked the deposit')).toBeLessThan(
+      out.indexOf('reference only'),
+    );
   });
 });

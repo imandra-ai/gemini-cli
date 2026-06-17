@@ -80,6 +80,12 @@ The agent follows an autoformalization loop:
 5. Map counterexamples and region constraints back to the original source and
    report findings.
 
+Results are reported **in plain, domain language by default** — e.g. "a deposit
+of a negative amount slips past the balance check (when `amount = -50`); reject
+amounts below zero" — so you don't need to know formal methods to act on them.
+The IML model, proof results, and raw regions are kept in an optional "reference
+only" section.
+
 ## The `codelogician` tool
 
 | `operation`    | Description                                                                                      |

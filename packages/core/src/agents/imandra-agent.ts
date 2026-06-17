@@ -27,50 +27,66 @@ import type { Config } from '../config/config.js';
 import { ThinkingLevel } from '@google/genai';
 
 const ImandraReportSchema = z.object({
-  Summary: z
+  // ---- Plain, FM-invisible primary output (this is what the user sees) ----
+  PlainSummary: z
     .string()
     .describe(
-      'A concise summary of what was formalized and what Imandra concluded, written for the main agent.',
+      "A plain-language summary for a NON-EXPERT: what was checked and what it means for the code, in the code's own domain terms. " +
+        'MUST NOT contain IML, ImandraX, "verify"/"instance", "[@@decomp]", "region decomposition", tactics, or other formal-methods jargon.',
     ),
-  ImlModel: z
-    .string()
-    .describe(
-      'The path to the IML file that was authored, or "" if none was created.',
-    ),
-  PropertiesVerified: z
+  Findings: z
     .array(
       z.object({
-        Property: z
-          .string()
-          .describe('Plain-language statement of the property checked.'),
-        Result: z
-          .enum(['proved', 'refuted', 'unknown', 'error'])
-          .describe('The outcome reported by ImandraX.'),
-        Counterexample: z
+        Issue: z
           .string()
           .describe(
-            'For a refuted property, the concrete counterexample input (mapped back to source terms). "" otherwise.',
+            'Plain-language description of the problem (or a confirmation that something holds), in the domain\'s terms — e.g. "a deposit of a negative amount slips past the balance check". No formal-methods jargon.',
           ),
-      }),
-    )
-    .describe('Properties that were formally verified, with their outcomes.'),
-  Regions: z
-    .array(
-      z.object({
-        Function: z.string().describe('The decomposed function.'),
-        RegionCount: z.number().describe('Number of behavioral regions found.'),
-        Notes: z
+        Severity: z
+          .enum(['bug', 'edge-case', 'ok', 'note'])
+          .describe(
+            '"bug" = a real defect; "edge-case" = an unhandled/ surprising case; "ok" = a confirmed-correct behavior; "note" = informational.',
+          ),
+        Trigger: z
           .string()
           .describe(
-            'Key regions / edge cases worth highlighting (constraints + behavior).',
+            'The concrete input or scenario that triggers it, in plain terms (e.g. "amount = -50"). "" if not applicable.',
           ),
+        Recommendation: z
+          .string()
+          .describe('What to do about it, in plain terms. "" if none.'),
       }),
     )
-    .describe('Region-decomposition results, if performed.'),
-  Recommendations: z
-    .array(z.string())
     .describe(
-      'Concrete, source-level recommendations: bugs found, missing guards, edge cases to test, etc.',
+      'Plain-language findings a non-expert can act on without understanding formal methods. Each bug/edge case must say what input triggers it and how to fix it.',
+    ),
+  // ---- Optional technical appendix (for those who want the formal detail) ----
+  TechnicalDetails: z
+    .object({
+      ImlModel: z
+        .string()
+        .describe('Path to the IML model file authored, or "".'),
+      Verified: z
+        .array(
+          z.object({
+            Property: z.string(),
+            Result: z.enum(['proved', 'refuted', 'unknown', 'error']),
+            Counterexample: z.string(),
+          }),
+        )
+        .describe('Formal verification goals and their outcomes.'),
+      Regions: z
+        .array(
+          z.object({
+            Function: z.string(),
+            RegionCount: z.number(),
+            Notes: z.string(),
+          }),
+        )
+        .describe('Region-decomposition results.'),
+    })
+    .describe(
+      'Formal-methods detail (IML model path, proof results, regions). Reference only — NOT required reading for the user.',
     ),
 });
 
@@ -131,7 +147,58 @@ export const ImandraAgent = (
       schema: ImandraReportSchema,
     },
 
-    processOutput: (output) => JSON.stringify(output, null, 2),
+    // Render the report plain-first: the domain-language summary and findings
+    // up top (what a non-expert reads), the formal detail in a clearly-labeled
+    // reference section they can ignore.
+    processOutput: (output) => {
+      const lines: string[] = [];
+      if (output.PlainSummary) {
+        lines.push(output.PlainSummary, '');
+      }
+      const severityLabel: Record<string, string> = {
+        bug: '🔴 bug',
+        'edge-case': '🟡 edge case',
+        ok: '🟢 ok',
+        note: 'ℹ️ note',
+      };
+      const findings = output.Findings ?? [];
+      if (findings.length > 0) {
+        lines.push('Findings:');
+        for (const f of findings) {
+          let line = `- [${severityLabel[f.Severity] ?? f.Severity}] ${f.Issue}`;
+          if (f.Trigger) {
+            line += ` (when: ${f.Trigger})`;
+          }
+          if (f.Recommendation) {
+            line += ` → ${f.Recommendation}`;
+          }
+          lines.push(line);
+        }
+        lines.push('');
+      }
+      const td = output.TechnicalDetails;
+      const detail: string[] = [];
+      if (td?.ImlModel) {
+        detail.push(`IML model: ${td.ImlModel}`);
+      }
+      for (const v of td?.Verified ?? []) {
+        detail.push(
+          `- ${v.Property}: ${v.Result}${v.Counterexample ? ` (counterexample: ${v.Counterexample})` : ''}`,
+        );
+      }
+      for (const r of td?.Regions ?? []) {
+        detail.push(
+          `- ${r.Function}: ${r.RegionCount} region(s)${r.Notes ? ` — ${r.Notes}` : ''}`,
+        );
+      }
+      if (detail.length > 0) {
+        lines.push(
+          'Formal-methods detail (Imandra/IML — reference only, not required reading):',
+        );
+        lines.push(...detail);
+      }
+      return lines.join('\n').trim();
+    },
 
     modelConfig: {
       model,
@@ -240,6 +307,16 @@ The canonical IML/ImandraX documentation ships with this CLI as a skill. Treat i
 - DO NOT modify the user's source code yourself unless the objective explicitly asks for a fix; your deliverable is the analysis and recommendations.
 - DO keep the formalization faithful — note any simplifications/assumptions you made, since they bound the validity of the result.
 - DO map every counterexample and notable region back to concrete source-level meaning.
+
+## Output style — explain in plain terms (formal methods stay invisible)
+Your reader is a software engineer who may know NOTHING about formal methods. The value is delivered only if they can act on your output without understanding Imandra.
+- \`PlainSummary\` and \`Findings\` are the primary output. Write them entirely in the **code's own domain language** — accounts, orders, prices, requests, retries, states — NOT in IML/ImandraX terms.
+- In \`PlainSummary\`/\`Findings\`, do **NOT** mention IML, ImandraX, "verify"/"instance", "[@@decomp]", "region decomposition", tactics, proofs, or admit/eval. Translate everything:
+  - a refuted property → "input X causes wrong behavior Y" (give the concrete triggering input and the fix);
+  - a region → "when <plain condition>, the code does <plain behavior>";
+  - a proved property → "confirmed: <plain guarantee> always holds".
+- Put ALL formal artifacts (IML model path, proof results, raw regions/constraints) ONLY in \`TechnicalDetails\` — it is optional reference, never required reading.
+- Prefer concrete, actionable findings ("a negative \`amount\` slips past the balance check; guard it") over abstract statements.
 
 When finished, call \`complete_task\` with the \`report\` argument as a valid JSON object matching the required schema.`,
     },

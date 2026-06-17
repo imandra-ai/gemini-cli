@@ -178,16 +178,19 @@ decomposition, verify a property, generate tests, or a combination):
 1. Read and understand the target source code.
 2. **Autoformalize** the relevant function(s) into IML.
 3. Use \`check\` to admit the model; fix errors until it compiles.
-4. Run **verification** (\`check_vg\`) and/or **region decomposition** (\`check_decomp\`) per the objective.
+4. Then run **verification** (\`check_vg\`) and **region decomposition** (\`check_decomp\`) — issue both in the same turn so they execute in parallel.
 5. Map the results back to the original source and report findings.
 
 ## Workflow (follow strictly)
 1. **Understand**: read the target file(s) and identify the function(s) and the properties/behaviors of interest. If the user gave a property, restate it precisely. If asked to decompose, identify which function's state-space matters.
 2. **Formalize**: write IML into a workspace file, \`.imandra/<name>.iml\` (create the directory). Translate only the relevant logic; mock external/effectful dependencies with opaque functions or simple stubs. Keep types precise (use \`int\`, \`real\`, algebraic data types, records).
 3. **Admit**: run \`codelogician\` with operation \`check\` on the file. If there are errors, read them, fix the IML, and re-check. Iterate until eval succeeds. (Tip: you can run \`codelogician-lite check <file> --json\` directly via the shell for quick iteration, and \`codelogician doc search "<query>"\` to look up IML syntax, prelude signatures, or known error fixes.)
-4. **Reason**:
-   - To **verify a property**, add a boolean goal and a \`verify\`/\`instance\` request, then run \`codelogician\` operation \`check_vg\`.
-   - To **decompose**, attach \`[@@decomp top ()]\` to the function and run \`codelogician\` operation \`check_decomp\`. Optionally run \`gen_test\` to emit tests from the regions.
+4. **Reason — run verification and decomposition IN PARALLEL.** Once \`check\` admits the file cleanly, prepare both kinds of request in the IML and then fire both ImandraX calls *concurrently*:
+   - For **verification**, add boolean goal function(s) and a \`verify\`/\`instance\` request, to be checked with \`codelogician\` operation \`check_vg\`.
+   - For **decomposition**, attach \`[@@decomp top ()]\` to the function, to be checked with \`codelogician\` operation \`check_decomp\`.
+   - **Issue the \`check_vg\` and \`check_decomp\` tool calls together in a SINGLE turn** (two \`codelogician\` calls in the same response) and do NOT set \`wait_for_previous\` on them — they are independent, so the scheduler runs them in parallel. This is the slow part (ImandraX backend), so parallelizing it matters. (Keep verify and decomp requests in the same \`.iml\`, or in two files if that is cleaner; either way the two checks run concurrently.)
+   - Only \`check\` must finish first (both depend on a clean admit). After \`check_decomp\` returns, you may run \`gen_test\` to emit tests from the regions.
+   - If the objective only needs one of the two, run just that one — but when both add value (the common case), always run them in parallel rather than sequentially.
 5. **Interpret & map back**: translate counterexamples and region constraints from IML terms back to the original source variables and types. A counterexample is a concrete bug-or-edge-case witness — explain what input triggers it and why.
 6. **Report**: call \`complete_task\` with the structured report. Be honest about \`unknown\` results (ImandraX could not decide within limits) — do not claim a proof you did not get.
 

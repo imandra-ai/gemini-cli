@@ -139,6 +139,7 @@ export const LIST_MCP_RESOURCES_TOOL_NAME = 'list_mcp_resources';
 
 // -- codelogician (Imandra / CodeLogician) --
 export const CODELOGICIAN_TOOL_NAME = 'codelogician';
+export const VISUALIZE_REGIONS_TOOL_NAME = 'visualize_regions';
 export const CODELOGICIAN_PARAM_OPERATION = 'operation';
 export const CODELOGICIAN_PARAM_FILE = 'file';
 export const CODELOGICIAN_PARAM_INDEX = 'index';

@@ -43,6 +43,7 @@ import {
   CodelogicianTool,
   CODELOGICIAN_LITE_BINARY,
 } from '../tools/codelogician.js';
+import { VisualizeRegionsTool } from '../tools/codelogician-visualize.js';
 import { isBinaryAvailable } from '../utils/binaryCheck.js';
 import { WriteFileTool } from '../tools/write-file.js';
 import { WebFetchTool } from '../tools/web-fetch.js';
@@ -4020,6 +4021,9 @@ export class Config implements McpContext, AgentLoopContext {
     if (isBinaryAvailable(CODELOGICIAN_LITE_BINARY)) {
       maybeRegister(CodelogicianTool, () =>
         registry.registerTool(new CodelogicianTool(this, this.messageBus)),
+      );
+      maybeRegister(VisualizeRegionsTool, () =>
+        registry.registerTool(new VisualizeRegionsTool(this, this.messageBus)),
       );
     }
     maybeRegister(AskUserTool, () =>

@@ -134,13 +134,13 @@ const CODELOGICIAN_PARAMETER_SCHEMA = {
   required: ['operation', 'file'],
 } as const;
 
-interface ProcessResult {
+export interface ProcessResult {
   code: number | null;
   stdout: string;
   stderr: string;
 }
 
-function runCodelogician(
+export function runCodelogician(
   args: string[],
   cwd: string,
   signal: AbortSignal,

@@ -14,6 +14,7 @@ import {
   SHELL_TOOL_NAME,
   WRITE_FILE_TOOL_NAME,
   CODELOGICIAN_TOOL_NAME,
+  VISUALIZE_REGIONS_TOOL_NAME,
 } from '../tools/tool-names.js';
 import {
   DEFAULT_THINKING_MODE,
@@ -162,6 +163,7 @@ export const ImandraAgent = (
         LS_TOOL_NAME,
         SHELL_TOOL_NAME,
         CODELOGICIAN_TOOL_NAME,
+        VISUALIZE_REGIONS_TOOL_NAME,
       ],
     },
 
@@ -189,7 +191,7 @@ decomposition, verify a property, generate tests, or a combination):
    - For **verification**, add boolean goal function(s) and a \`verify\`/\`instance\` request, to be checked with \`codelogician\` operation \`check_vg\`.
    - For **decomposition**, attach \`[@@decomp top ()]\` to the function, to be checked with \`codelogician\` operation \`check_decomp\`.
    - **Issue the \`check_vg\` and \`check_decomp\` tool calls together in a SINGLE turn** (two \`codelogician\` calls in the same response) and do NOT set \`wait_for_previous\` on them — they are independent, so the scheduler runs them in parallel. This is the slow part (ImandraX backend), so parallelizing it matters. (Keep verify and decomp requests in the same \`.iml\`, or in two files if that is cleaner; either way the two checks run concurrently.)
-   - Only \`check\` must finish first (both depend on a clean admit). After \`check_decomp\` returns, you may run \`gen_test\` to emit tests from the regions.
+   - Only \`check\` must finish first (both depend on a clean admit). After \`check_decomp\` returns, you may run \`gen_test\` to emit tests from the regions, and call \`visualize_regions\` (with the same file/function) to pop open an interactive Voronoi diagram of the regions for the user.
    - If the objective only needs one of the two, run just that one — but when both add value (the common case), always run them in parallel rather than sequentially.
 5. **Interpret & map back**: translate counterexamples and region constraints from IML terms back to the original source variables and types. A counterexample is a concrete bug-or-edge-case witness — explain what input triggers it and why.
 6. **Report**: call \`complete_task\` with the structured report. Be honest about \`unknown\` results (ImandraX could not decide within limits) — do not claim a proof you did not get.

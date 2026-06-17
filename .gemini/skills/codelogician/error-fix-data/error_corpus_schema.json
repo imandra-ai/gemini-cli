@@ -1,0 +1,315 @@
+{
+  "$defs": {
+    "ErrorKind": {
+      "enum": [
+        "AppliedSymbolTypeErr",
+        "ConfigError",
+        "CptrGetOtherErr",
+        "CptrNotFoundInStorage",
+        "GenericUserError",
+        "InvalidFunDefinition",
+        "InvalidQident",
+        "InvalidTypeAlias",
+        "InvalidTypeDefinition",
+        "InvalidCname",
+        "LevalError",
+        "LowerCirError",
+        "LowerMirError",
+        "LowerRirError",
+        "ParserNotRegistered",
+        "PatmatchError",
+        "SynTermCreateError",
+        "SyntaxAttributeErr",
+        "SyntaxErr",
+        "SyntaxUnsugarErr",
+        "TacticEvalErr",
+        "TermInvalidShape",
+        "TermModelFIErr",
+        "ThreadFutFailure",
+        "ThreadTimerFailure",
+        "TyInferInternalError",
+        "TypeArityMismatch",
+        "TypeCycleDetected",
+        "TypeErr",
+        "TypeVarAlreadyBound",
+        "TypedSymbolNonGround",
+        "UidContentAddressingNameMismatch",
+        "UidContentAddressingNotTemporary",
+        "UidNotContentAddressed",
+        "UnknownBuiltinSymbolForUid",
+        "UnknownTypeDefinition",
+        "InteractiveProofErr",
+        "ProofDeserError",
+        "ProofCheckError",
+        "InvalidAnchor",
+        "InductSchemaError",
+        "Unsupported",
+        "LowerFolError",
+        "ValidationError",
+        "LspError",
+        "Interrupted",
+        "RedisError",
+        "CIRDeclNotFoundInStorage",
+        "SerializationError",
+        "DeserializationError",
+        "DebugMode",
+        "ImportError",
+        "GenericIOError",
+        "DuneError",
+        "RpcError",
+        "RpcDeserError",
+        "RpcNetworkError",
+        "RpcTimeout",
+        "AuthError",
+        "FileExists",
+        "DirectoryCreationError",
+        "DecompError",
+        "VersionMismatchError",
+        "OhNoError",
+        "Debounced"
+      ],
+      "title": "ErrorKind",
+      "type": "string"
+    },
+    "ErrorMessage": {
+      "properties": {
+        "msg": {
+          "title": "Msg",
+          "type": "string"
+        },
+        "locs": {
+          "description": "Locations for this message",
+          "items": {
+            "$ref": "#/$defs/Location"
+          },
+          "title": "Locs",
+          "type": "array"
+        },
+        "backtrace": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Captured backtrace",
+          "title": "Backtrace"
+        }
+      },
+      "required": [
+        "msg"
+      ],
+      "title": "ErrorMessage",
+      "type": "object"
+    },
+    "ErrorTag": {
+      "enum": [
+        "OCAML_CONFUSION",
+        "TERMINATION_PROOFS",
+        "HIGHER_ORDER_RETURN_TYPES",
+        "OPAQUE"
+      ],
+      "title": "ErrorTag",
+      "type": "string"
+    },
+    "Item": {
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "id": {
+          "description": "uuidv7",
+          "title": "Id",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "created at",
+          "title": "Created At",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/ErrorKind",
+          "description": "error kind"
+        },
+        "msg_str": {
+          "description": "error message header from ImandraX API",
+          "title": "Msg Str",
+          "type": "string"
+        },
+        "tags": {
+          "description": "error tags",
+          "items": {
+            "$ref": "#/$defs/ErrorTag"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "repro_iml": {
+          "description": "minimum code to reproduce the error",
+          "title": "Repro Iml",
+          "type": "string"
+        },
+        "err_msg": {
+          "$ref": "#/$defs/ErrorMessage",
+          "description": "error message from ImandraX API, including header, location, and trace"
+        },
+        "is_po_err": {
+          "description": "whether the error is a proof-obligation error",
+          "title": "Is Po Err",
+          "type": "boolean"
+        },
+        "explanation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "explanation of the error",
+          "title": "Explanation"
+        },
+        "solution": {
+          "description": "solution",
+          "title": "Solution",
+          "type": "string"
+        },
+        "solution_description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Solution Description"
+        },
+        "prevention": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "prevention hints",
+          "title": "Prevention"
+        },
+        "additional_info": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "additional info",
+          "title": "Additional Info",
+          "type": "object"
+        }
+      },
+      "required": [
+        "kind",
+        "msg_str",
+        "tags",
+        "repro_iml",
+        "err_msg",
+        "is_po_err",
+        "solution",
+        "solution_description"
+      ],
+      "title": "Item",
+      "type": "object"
+    },
+    "Location": {
+      "properties": {
+        "file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "File"
+        },
+        "start": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Position"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "stop": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Position"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "Location",
+      "type": "object"
+    },
+    "Position": {
+      "properties": {
+        "line": {
+          "title": "Line",
+          "type": "integer"
+        },
+        "col": {
+          "title": "Col",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "line",
+        "col"
+      ],
+      "title": "Position",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "$schema": {
+      "title": "$Schema",
+      "type": "string"
+    },
+    "items": {
+      "items": {
+        "$ref": "#/$defs/Item"
+      },
+      "title": "Items",
+      "type": "array"
+    }
+  },
+  "required": [
+    "$schema",
+    "items"
+  ],
+  "title": "ErrorCorpus",
+  "type": "object"
+}

@@ -110,6 +110,24 @@ also disable the subagent explicitly in `settings.json`:
 }
 ```
 
+## Reference docs (bundled skill)
+
+The canonical IML / ImandraX documentation (syntax, verification and
+region-decomposition guides, tactics, prelude reference, and an error→fix
+corpus) is shipped as a skill at `.gemini/skills/codelogician/`, produced by
+`codelogician doc dump`. The `formalreasoning` agent reads from there instead of
+working from memory.
+
+When you upgrade the CodeLogician CLI, refresh the bundled docs so they stay in
+sync with the installed binary:
+
+```bash
+npm run skill:codelogician   # re-dumps docs and stamps CODELOGICIAN_VERSION
+```
+
+The current bundled version is recorded in
+`.gemini/skills/codelogician/CODELOGICIAN_VERSION`.
+
 ## Learn more
 
 - CodeLogician: https://www.codelogician.dev

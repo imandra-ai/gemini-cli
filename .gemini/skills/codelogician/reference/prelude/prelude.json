@@ -1,0 +1,2003 @@
+[
+  {
+    "module": "",
+    "name": "+.",
+    "type": "function",
+    "signature": "val +. : real -> real -> real",
+    "doc": "[+.] is addition for reals",
+    "pattern": "Real number arithmetic addition"
+  },
+  {
+    "module": "Int",
+    "name": "t",
+    "type": "type",
+    "signature": "type t = int",
+    "doc": "Integer type using arbitrary precision integers (Z.t from Zarith)",
+    "pattern": null
+  },
+  {
+    "module": "Int",
+    "name": "mod_zero_prod",
+    "type": "axiom",
+    "signature": "val mod_zero_prod : int -> int -> int -> bool",
+    "doc": null,
+    "pattern": null
+  },
+  {
+    "module": "Int",
+    "name": "mod_sub_id",
+    "type": "axiom",
+    "signature": "val mod_sub_id : int -> int -> bool",
+    "doc": null,
+    "pattern": null
+  },
+  {
+    "module": "List",
+    "name": "append_to_nil",
+    "type": "theorem",
+    "signature": "val append_to_nil : 'a list -> bool",
+    "doc": "Theorem: (List.append x []) = x",
+    "pattern": null
+  },
+  {
+    "module": "List",
+    "name": "append_single",
+    "type": "theorem",
+    "signature": "val append_single : 'a -> 'a list -> 'a list -> bool",
+    "doc": "Theorem: (List.append (List.append y ([x])) z) = (List.append y ((x :: z)))",
+    "pattern": null
+  },
+  {
+    "module": "List",
+    "name": "len_nonnegative",
+    "type": "theorem",
+    "signature": "val len_nonnegative : 'a list -> bool",
+    "doc": "Length of a list is non-negative. This useful theorem is installed as a forward-chaining rule.",
+    "pattern": null
+  },
+  {
+    "module": "List",
+    "name": "len_zero_is_empty",
+    "type": "theorem",
+    "signature": "val len_zero_is_empty : 'a list -> bool",
+    "doc": "A list has length zero iff it is empty. This is a useful rewrite rule for obtaining empty lists.",
+    "pattern": null
+  },
+  {
+    "module": "List",
+    "name": "len_append",
+    "type": "theorem",
+    "signature": "val len_append : 'a list -> 'a list -> bool",
+    "doc": "The length of (x @ y) is the sum of the lengths of x and y",
+    "pattern": null
+  },
+  {
+    "module": "",
+    "name": "int",
+    "type": "type",
+    "signature": "type int = <logic_core_builtin>",
+    "doc": "Builtin integer type, using arbitrary precision integers. This type is an alias to {!Z.t} (using Zarith). NOTE: here Imandra diverges from normal OCaml, where integers width is bounded by native machine integers. \"Normal\" OCaml integers have type {!Caml.Int.t} and can be entered using the 'i' suffix: [0i]",
+    "pattern": "Arbitrary precision integers for unbounded calculations"
+  },
+  {
+    "module": "",
+    "name": "bool",
+    "type": "type",
+    "signature": "type nonrec bool = <logic_core_builtin>",
+    "doc": "Builtin boolean type.",
+    "pattern": "Boolean true/false values for logical operations"
+  },
+  {
+    "module": "",
+    "name": "||",
+    "type": "function",
+    "signature": "val || : bool -> bool -> bool",
+    "doc": "[||] is the boolean OR operator",
+    "pattern": "Logical OR operation between two boolean values"
+  },
+  {
+    "module": "",
+    "name": "&&",
+    "type": "function",
+    "signature": "val && : bool -> bool -> bool",
+    "doc": "[&&] is the boolean AND operator",
+    "pattern": "Logical AND operation between two boolean values"
+  },
+  {
+    "module": "",
+    "name": "unit",
+    "type": "type",
+    "signature": "type nonrec unit = | ()",
+    "doc": "Unit type with single constructor [()]",
+    "pattern": "Represents absence of a meaningful value"
+  },
+  {
+    "module": "",
+    "name": "=",
+    "type": "function",
+    "signature": "val = : 'a -> 'a -> bool",
+    "doc": "Equality. Must be applied to non-function types.",
+    "pattern": "Value equality comparison"
+  },
+  {
+    "module": "",
+    "name": "<>",
+    "type": "function",
+    "signature": "val <> : 'a -> 'a -> bool",
+    "doc": "[<>] is the inequality operator",
+    "pattern": "Value inequality comparison"
+  },
+  {
+    "module": "",
+    "name": "not",
+    "type": "function",
+    "signature": "val not : bool -> bool",
+    "doc": "[not] is the boolean NOT operator",
+    "pattern": "Logical negation of boolean values"
+  },
+  {
+    "module": "",
+    "name": "==>",
+    "type": "function",
+    "signature": "val ==> : bool -> bool -> bool",
+    "doc": "[==>] is logical implication",
+    "pattern": "Logical implication in mathematical reasoning"
+  },
+  {
+    "module": "",
+    "name": "<==",
+    "type": "function",
+    "signature": "val <== : bool -> bool -> bool",
+    "doc": "[<==] is reverse logical implication",
+    "pattern": "Reverse logical implication in mathematical reasoning"
+  },
+  {
+    "module": "",
+    "name": "<==>",
+    "type": "function",
+    "signature": "val <==> : bool -> bool -> bool",
+    "doc": "[<==>] is logical equivalence",
+    "pattern": "Logical equivalence/biconditional in mathematical reasoning"
+  },
+  {
+    "module": "",
+    "name": "+",
+    "type": "function",
+    "signature": "val + : int -> int -> int",
+    "doc": "[+] is integer addition",
+    "pattern": "Basic arithmetic addition of integers"
+  },
+  {
+    "module": "",
+    "name": "const",
+    "type": "function",
+    "signature": "val const : 'a -> 'b -> 'a",
+    "doc": "[const x y] returns [x]. In other words, [const x] is the constant function that always returns [x].",
+    "pattern": "Creating constant functions in functional programming"
+  },
+  {
+    "module": "",
+    "name": ">=",
+    "type": "function",
+    "signature": "val >= : int -> int -> bool",
+    "doc": "[>=] is greater than or equal comparison for integers",
+    "pattern": "Numeric comparison for ordering"
+  },
+  {
+    "module": "",
+    "name": "mk_nat",
+    "type": "function",
+    "signature": "val mk_nat : int -> int",
+    "doc": "[mk_nat x] converts integer [x] to natural number by returning [x] if non-negative, 0 otherwise",
+    "pattern": "Converting integers to non-negative numbers"
+  },
+  {
+    "module": "",
+    "name": "option",
+    "type": "type",
+    "signature": "type nonrec option = | None | Some of 'a",
+    "doc": "Option type representing optional values",
+    "pattern": "Representing values that may or may not exist"
+  },
+  {
+    "module": "",
+    "name": "list",
+    "type": "type",
+    "signature": "type list = | [] | :: of 'a * 'a list",
+    "doc": "List type with empty list [] and cons :: constructors",
+    "pattern": "Sequential data structure with variable length"
+  },
+  {
+    "module": "",
+    "name": "float",
+    "type": "type",
+    "signature": "type nonrec float = <logic_core_builtin>",
+    "doc": "Floating point number type",
+    "pattern": "IEEE 754 floating point arithmetic"
+  },
+  {
+    "module": "",
+    "name": "real",
+    "type": "type",
+    "signature": "type nonrec real = <logic_core_builtin>",
+    "doc": "Real number type",
+    "pattern": "Mathematical real number calculations"
+  },
+  {
+    "module": "",
+    "name": "string",
+    "type": "type",
+    "signature": "type nonrec string = <logic_core_builtin>",
+    "doc": "String type",
+    "pattern": "Text manipulation and processing"
+  },
+  {
+    "module": "",
+    "name": "<",
+    "type": "function",
+    "signature": "val < : int -> int -> bool",
+    "doc": "[<] is less than comparison for integers",
+    "pattern": "Numeric comparison for strict ordering"
+  },
+  {
+    "module": "",
+    "name": "<=",
+    "type": "function",
+    "signature": "val <= : int -> int -> bool",
+    "doc": "[<=] is less than or equal comparison for integers",
+    "pattern": "Numeric comparison for non-strict ordering"
+  },
+  {
+    "module": "",
+    "name": ">",
+    "type": "function",
+    "signature": "val > : int -> int -> bool",
+    "doc": "[>] is greater than comparison for integers",
+    "pattern": "Numeric comparison for strict ordering"
+  },
+  {
+    "module": "",
+    "name": "min",
+    "type": "function",
+    "signature": "val min : int -> int -> int",
+    "doc": "[min x y] returns the minimum of integers [x] and [y]",
+    "pattern": "Finding smaller of two numbers"
+  },
+  {
+    "module": "",
+    "name": "max",
+    "type": "function",
+    "signature": "val max : int -> int -> int",
+    "doc": "[max x y] returns the maximum of integers [x] and [y]",
+    "pattern": "Finding larger of two numbers"
+  },
+  {
+    "module": "",
+    "name": "<.",
+    "type": "function",
+    "signature": "val <. : real -> real -> bool",
+    "doc": "[<.] is less than comparison for reals",
+    "pattern": "Real number comparison for strict ordering"
+  },
+  {
+    "module": "",
+    "name": "<=.",
+    "type": "function",
+    "signature": "val <=. : real -> real -> bool",
+    "doc": "[<=.] is less than or equal comparison for reals",
+    "pattern": "Real number comparison for non-strict ordering"
+  },
+  {
+    "module": "",
+    "name": ">.",
+    "type": "function",
+    "signature": "val >. : real -> real -> bool",
+    "doc": "[>.] is greater than comparison for reals",
+    "pattern": "Real number comparison for strict ordering"
+  },
+  {
+    "module": "",
+    "name": ">=.",
+    "type": "function",
+    "signature": "val >=. : real -> real -> bool",
+    "doc": "[>=.] is greater than or equal comparison for reals",
+    "pattern": "Real number comparison for non-strict ordering"
+  },
+  {
+    "module": "",
+    "name": "min_r",
+    "type": "function",
+    "signature": "val min_r : real -> real -> real",
+    "doc": "[min_r x y] returns the minimum of reals [x] and [y]",
+    "pattern": "Finding smaller of two real numbers"
+  },
+  {
+    "module": "",
+    "name": "max_r",
+    "type": "function",
+    "signature": "val max_r : real -> real -> real",
+    "doc": "[max_r x y] returns the maximum of reals [x] and [y]",
+    "pattern": "Finding larger of two real numbers"
+  },
+  {
+    "module": "",
+    "name": "~-",
+    "type": "function",
+    "signature": "val ~- : int -> int",
+    "doc": "[~- x] returns the negation of integer [x]",
+    "pattern": "Arithmetic negation of integers"
+  },
+  {
+    "module": "",
+    "name": "abs",
+    "type": "function",
+    "signature": "val abs : int -> int",
+    "doc": "[abs x] returns the absolute value of integer [x]",
+    "pattern": "Computing magnitude of numbers"
+  },
+  {
+    "module": "",
+    "name": "-",
+    "type": "function",
+    "signature": "val - : int -> int -> int",
+    "doc": "[-] is integer subtraction",
+    "pattern": "Basic arithmetic subtraction"
+  },
+  {
+    "module": "",
+    "name": "~+",
+    "type": "function",
+    "signature": "val ~+ : int -> int",
+    "doc": "[~+ x] returns [x] unchanged (unary plus)",
+    "pattern": "Identity operation on numbers"
+  },
+  {
+    "module": "",
+    "name": "*",
+    "type": "function",
+    "signature": "val * : int -> int -> int",
+    "doc": "[*] is integer multiplication",
+    "pattern": "Basic arithmetic multiplication"
+  },
+  {
+    "module": "",
+    "name": "/",
+    "type": "function",
+    "signature": "val / : int -> int -> int",
+    "doc": "Euclidian division on integers, see http://smtlib.cs.uiowa.edu/theories-Ints.shtml",
+    "pattern": "Integer division with rounding towards zero"
+  },
+  {
+    "module": "",
+    "name": "mod",
+    "type": "function",
+    "signature": "val mod : int -> int -> int",
+    "doc": "Euclidian remainder on integers",
+    "pattern": "Computing remainders in modular arithmetic"
+  },
+  {
+    "module": "",
+    "name": "compare",
+    "type": "function",
+    "signature": "val compare : int -> int -> int",
+    "doc": "Total order, if x = y then 0 else if x < y then -1 else 1",
+    "pattern": "Three-way comparison for sorting and ordering"
+  },
+  {
+    "module": "",
+    "name": "result",
+    "type": "type",
+    "signature": "type result = | Ok of 'a | Error of 'b",
+    "doc": "Result type, representing either a successful result [Ok x] or an error [Error x].",
+    "pattern": "Error handling and computation results"
+  },
+  {
+    "module": "",
+    "name": "either",
+    "type": "type",
+    "signature": "type either = | Left of 'a | Right of 'b",
+    "doc": "A familiar type for Haskellers",
+    "pattern": "Representing values of two different types"
+  },
+  {
+    "module": "",
+    "name": "|>",
+    "type": "function",
+    "signature": "val |> : 'a -> ('a -> 'b) -> 'b",
+    "doc": "Pipeline operator. [x |> f] is the same as [f x], but it composes nicely: [ x |> f |> g |> h] can be more readable than [h(g(f x))].",
+    "pattern": "Function composition in data processing pipelines"
+  },
+  {
+    "module": "",
+    "name": "@@",
+    "type": "function",
+    "signature": "val @@ : ('a -> 'b) -> 'a -> 'b",
+    "doc": "Right-associative application operator. [f @@ x] is the same as [f x], but it binds to the right: [f @@ g @@ h @@ x] is the same as [f (g (h x))] but with fewer parentheses.",
+    "pattern": "Nested function application without parentheses"
+  },
+  {
+    "module": "",
+    "name": "id",
+    "type": "function",
+    "signature": "val id : 'a -> 'a",
+    "doc": "Identity function. [id x = x] always holds.",
+    "pattern": "Function that returns its input unchanged"
+  },
+  {
+    "module": "",
+    "name": "%>",
+    "type": "function",
+    "signature": "val %> : ('a -> 'b) -> ('b -> 'c) -> 'a -> 'c",
+    "doc": "Mathematical composition operator. [f %> g] is [fun x -> g (f x)]",
+    "pattern": "Composing functions in mathematical style"
+  },
+  {
+    "module": "",
+    "name": "-.",
+    "type": "function",
+    "signature": "val -. : real -> real -> real",
+    "doc": "[-.] is subtraction for reals",
+    "pattern": "Real number arithmetic subtraction"
+  },
+  {
+    "module": "",
+    "name": "~-.",
+    "type": "function",
+    "signature": "val ~-. : real -> real",
+    "doc": "[~-.] is negation for reals",
+    "pattern": "Real number arithmetic negation"
+  },
+  {
+    "module": "",
+    "name": "*.",
+    "type": "function",
+    "signature": "val *. : real -> real -> real",
+    "doc": "[*.] is multiplication for reals",
+    "pattern": "Real number arithmetic multiplication"
+  },
+  {
+    "module": "",
+    "name": "/.",
+    "type": "function",
+    "signature": "val /. : real -> real -> real",
+    "doc": "[/.] is division for reals",
+    "pattern": "Real number arithmetic division"
+  },
+  {
+    "module": "",
+    "name": "@",
+    "type": "function",
+    "signature": "val @ : 'a list -> 'a list -> 'a list",
+    "doc": "Infix alias to {!List.append}",
+    "pattern": "List concatenation"
+  },
+  {
+    "module": "",
+    "name": "^",
+    "type": "function",
+    "signature": "val ^ : String.t -> String.t -> String.t",
+    "doc": "Alias to {!String.append}",
+    "pattern": "String concatenation"
+  },
+  {
+    "module": "",
+    "name": "succ",
+    "type": "function",
+    "signature": "val succ : int -> int",
+    "doc": "[succ x] returns the successor of integer [x]",
+    "pattern": "Incrementing integers by one"
+  },
+  {
+    "module": "",
+    "name": "pred",
+    "type": "function",
+    "signature": "val pred : int -> int",
+    "doc": "[pred x] returns the predecessor of integer [x]",
+    "pattern": "Decrementing integers by one"
+  },
+  {
+    "module": "",
+    "name": "fst",
+    "type": "function",
+    "signature": "val fst : ('a * 'b) -> 'a",
+    "doc": "[fst (x,y)] returns the first component [x] of pair [(x,y)]",
+    "pattern": "Accessing first element of a pair"
+  },
+  {
+    "module": "",
+    "name": "snd",
+    "type": "function",
+    "signature": "val snd : ('a * 'b) -> 'b",
+    "doc": "[snd (x,y)] returns the second component [y] of pair [(x,y)]",
+    "pattern": "Accessing second element of a pair"
+  },
+  {
+    "module": "Set",
+    "name": "t",
+    "type": "type",
+    "signature": "type Set.t = ('a, bool) Map.t",
+    "doc": "The set type, implemented as a map from elements to boolean values indicating membership",
+    "pattern": null
+  },
+  {
+    "module": "Set",
+    "name": "empty",
+    "type": "function",
+    "signature": "val empty : ('a, bool) Map.t",
+    "doc": "Creates an empty set where all elements are mapped to false",
+    "pattern": "Initializing a new set before adding elements, similar to creating an empty HashSet or Set in other languages"
+  },
+  {
+    "module": "Set",
+    "name": "full",
+    "type": "function",
+    "signature": "val full : ('a, bool) Map.t",
+    "doc": "Creates a full set where all elements are mapped to true",
+    "pattern": "Creating a universal set containing all possible elements, often used as a starting point for set operations like complement"
+  },
+  {
+    "module": "Set",
+    "name": "is_empty",
+    "type": "function",
+    "signature": "val is_empty : 'a Set.t -> bool",
+    "doc": "Tests if set [s] is empty by comparing it to the empty set",
+    "pattern": "Checking if a collection contains any elements before performing operations, like validating user input or checking search results"
+  },
+  {
+    "module": "Set",
+    "name": "is_valid",
+    "type": "function",
+    "signature": "val is_valid : 'a Set.t -> bool",
+    "doc": "Checks if set [s] is valid. Always returns true since all sets are valid",
+    "pattern": "Validating set integrity, though in this implementation all sets are considered valid by design"
+  },
+  {
+    "module": "Set",
+    "name": "mem",
+    "type": "function",
+    "signature": "val mem : 'a -> 'a Set.t -> bool",
+    "doc": "Tests if element [x] is a member of set [s]",
+    "pattern": "Testing element existence in a collection, like checking if a user ID exists or if a value is allowed"
+  },
+  {
+    "module": "Set",
+    "name": "subset",
+    "type": "function",
+    "signature": "val subset : 'a Set.t -> 'a Set.t -> bool",
+    "doc": "Tests if set [s1] is a subset of set [s2]",
+    "pattern": "Checking if one collection's elements are fully contained within another, like validating permissions or category hierarchies"
+  },
+  {
+    "module": "Set",
+    "name": "add",
+    "type": "function",
+    "signature": "val add : 'a -> 'a Set.t -> 'a Set.t",
+    "doc": "Adds element [x] to set [s]",
+    "pattern": "Adding unique elements to a collection, ensuring no duplicates, like building a set of unique identifiers or tags"
+  },
+  {
+    "module": "Set",
+    "name": "remove",
+    "type": "function",
+    "signature": "val remove : 'a -> 'a Set.t -> 'a Set.t",
+    "doc": "Removes element [x] from set [s]",
+    "pattern": "Removing elements from a collection while maintaining uniqueness, like removing revoked permissions or deleted items"
+  },
+  {
+    "module": "Set",
+    "name": "inter",
+    "type": "function",
+    "signature": "val inter : 'a Set.t -> 'a Set.t -> 'a Set.t",
+    "doc": "Computes the intersection of sets [s1] and [s2]",
+    "pattern": "Finding common elements between two collections, like identifying shared permissions or matching criteria"
+  },
+  {
+    "module": "Set",
+    "name": "union",
+    "type": "function",
+    "signature": "val union : 'a Set.t -> 'a Set.t -> 'a Set.t",
+    "doc": "Computes the union of sets [s1] and [s2]",
+    "pattern": "Combining two collections while eliminating duplicates, like merging user groups or combining search results"
+  },
+  {
+    "module": "Set",
+    "name": "complement",
+    "type": "function",
+    "signature": "val complement : 'a Set.t -> 'a Set.t",
+    "doc": "Computes the complement of set [s]",
+    "pattern": "Finding all elements not in a set, useful for implementing negation or finding excluded items"
+  },
+  {
+    "module": "Set",
+    "name": "diff",
+    "type": "function",
+    "signature": "val diff : 'a Set.t -> 'a Set.t -> 'a Set.t",
+    "doc": "Computes the difference of sets [s1] and [s2]",
+    "pattern": "Finding elements in one collection but not another, like identifying unique permissions or filtering exclusions"
+  },
+  {
+    "module": "Set",
+    "name": "of_list",
+    "type": "function",
+    "signature": "val of_list : 'a list -> ('a, bool) Map.t",
+    "doc": "Creates a set from list [l] by recursively adding each element",
+    "pattern": "Converting sequences or arrays to sets while eliminating duplicates, like creating a set of unique values from user input or data import"
+  },
+  {
+    "module": "Set",
+    "name": "++",
+    "type": "function",
+    "signature": "val (++) : 'a Set.t -> 'a Set.t -> 'a Set.t",
+    "doc": "An infix operator alias for [Set.union]",
+    "pattern": "Providing a more concise syntax for combining sets, similar to overloaded operators in other languages"
+  },
+  {
+    "module": "Set",
+    "name": "--",
+    "type": "function",
+    "signature": "val (--) : 'a Set.t -> 'a Set.t -> 'a Set.t",
+    "doc": "An infix operator alias for [Set.diff]",
+    "pattern": "Providing a more concise syntax for set difference, similar to overloaded operators in other languages"
+  },
+  {
+    "module": "Result",
+    "name": "t",
+    "type": "type",
+    "signature": "type ('a, 'b) t = ('a, 'b) result",
+    "doc": "The result type represents either success (Ok) or failure (Error) outcomes.",
+    "pattern": null
+  },
+  {
+    "module": "Result",
+    "name": "return",
+    "type": "function",
+    "signature": "val return : 'a -> ('a, 'b) result",
+    "doc": "wraps a value [x] in an Ok result",
+    "pattern": "Converting raw values into success results for validation chains and computation sequences"
+  },
+  {
+    "module": "Result",
+    "name": "fail",
+    "type": "function",
+    "signature": "val fail : 'a -> ('b, 'a) result",
+    "doc": "wraps a value [s] in an Error result",
+    "pattern": "Converting error information into error results during validation or error handling"
+  },
+  {
+    "module": "Result",
+    "name": "map",
+    "type": "function",
+    "signature": "val map : ('b -> 'c) -> ('b, 'a) result -> ('c, 'a) result",
+    "doc": "applies function [f] to the value inside [e] if it's Ok, otherwise propagates the Error",
+    "pattern": "Applying transformations to success values while preserving error state"
+  },
+  {
+    "module": "Result",
+    "name": "map_err",
+    "type": "function",
+    "signature": "val map_err : ('a -> 'c) -> ('b, 'a) result -> ('b, 'c) result",
+    "doc": "applies function [f] to the error value if [e] is Error, otherwise propagates the Ok value",
+    "pattern": "Converting between error types while preserving success values"
+  },
+  {
+    "module": "Result",
+    "name": "get_or",
+    "type": "function",
+    "signature": "val get_or : default:'a -> ('a, 'b) result -> 'a",
+    "doc": "extracts the Ok value from [e], or returns [default] if [e] is Error",
+    "pattern": "Extracting values with fallback for error cases"
+  },
+  {
+    "module": "Result",
+    "name": "map_or",
+    "type": "function",
+    "signature": "val map_or : default:'a -> ('c -> 'a) -> ('c, 'b) result -> 'a",
+    "doc": "applies [f] to the Ok value in [e], or returns [default] if [e] is Error",
+    "pattern": "Transforming success values with a fallback for error cases"
+  },
+  {
+    "module": "Result",
+    "name": ">|=",
+    "type": "function",
+    "signature": "val (>|=) : ('b, 'a) result -> ('b -> 'c) -> ('c, 'a) result",
+    "doc": "is an infix operator alias for [Result.map]",
+    "pattern": "Infix syntax for transforming success values"
+  },
+  {
+    "module": "Result",
+    "name": "flat_map",
+    "type": "function",
+    "signature": "val flat_map : ('b -> ('c, 'a) result) -> ('b, 'a) result -> ('c, 'a) result",
+    "doc": "applies [f] to the Ok value in [e] to produce a new result, or propagates the Error",
+    "pattern": "Chaining operations that can fail"
+  },
+  {
+    "module": "Result",
+    "name": ">>=",
+    "type": "function",
+    "signature": "val (>>=) : ('b, 'a) result -> ('b -> ('c, 'a) result) -> ('c, 'a) result",
+    "doc": "is an infix operator alias for [Result.flat_map]",
+    "pattern": "Infix syntax for chaining fallible operations"
+  },
+  {
+    "module": "Result",
+    "name": "fold",
+    "type": "function",
+    "signature": "val fold : ('b -> 'c) -> ('a -> 'c) -> ('b, 'a) result -> 'c",
+    "doc": "applies [ok] to the value if [x] is Ok, or applies [error] if [x] is Error",
+    "pattern": "Converting both success and error cases to a single type"
+  },
+  {
+    "module": "Result",
+    "name": "is_ok",
+    "type": "function",
+    "signature": "val is_ok : ('a, 'b) result -> bool",
+    "doc": "returns true if [x] is Ok, false otherwise",
+    "pattern": "Testing if a result represents success"
+  },
+  {
+    "module": "Result",
+    "name": "is_error",
+    "type": "function",
+    "signature": "val is_error : ('a, 'b) result -> bool",
+    "doc": "returns true if [x] is Error, false otherwise",
+    "pattern": "Testing if a result represents failure"
+  },
+  {
+    "module": "Result",
+    "name": "monoid_product",
+    "type": "function",
+    "signature": "val monoid_product : ('a, 'b) result -> ('c, 'b) result -> ('a * 'c, 'b) result",
+    "doc": "combines two results into a tuple if both are Ok, otherwise returns the first Error encountered",
+    "pattern": "Combining two independent results into a tuple result"
+  },
+  {
+    "module": "Result",
+    "name": "let+",
+    "type": "function",
+    "signature": "val let+ : ('c, 'a) result",
+    "doc": "is a binding operator alias for [>|=] (map)",
+    "pattern": "Binding syntax for transforming success values"
+  },
+  {
+    "module": "Result",
+    "name": "and+",
+    "type": "function",
+    "signature": "val and+ : (('a * 'c), 'b) result",
+    "doc": "is a binding operator alias for [Result.monoid_product]",
+    "pattern": "Binding syntax for combining independent results"
+  },
+  {
+    "module": "Result",
+    "name": "let*",
+    "type": "function",
+    "signature": "val let* : ('c, 'a) result",
+    "doc": "is a binding operator alias for [>>=] (flat_map)",
+    "pattern": "Binding syntax for chaining fallible operations"
+  },
+  {
+    "module": "Result",
+    "name": "and*",
+    "type": "function",
+    "signature": "val and* : (('a * 'c), 'b) result",
+    "doc": "is a binding operator alias for [Result.monoid_product]",
+    "pattern": "Alternative binding syntax for combining results"
+  },
+  {
+    "module": "Real",
+    "name": "t",
+    "type": "type",
+    "signature": "type t = real",
+    "doc": "The real number type representing arbitrary precision real numbers",
+    "pattern": "Representing exact decimal numbers without floating point imprecision"
+  },
+  {
+    "module": "Real",
+    "name": "of_int",
+    "type": "function",
+    "signature": "val of_int : int -> real",
+    "doc": "Converts an integer [i] to a real number",
+    "pattern": "Converting integer values to real numbers for exact decimal arithmetic"
+  },
+  {
+    "module": "Real",
+    "name": "_to_int_round_down",
+    "type": "function",
+    "signature": "val _to_int_round_down : real -> int",
+    "doc": "Converts a real number [r] to an integer by rounding down. Internal helper function.",
+    "pattern": "Internal function for floor rounding in integer conversion"
+  },
+  {
+    "module": "Real",
+    "name": "to_int",
+    "type": "function",
+    "signature": "val to_int : real -> int",
+    "doc": "Converts a real number [r] to an integer by rounding towards zero",
+    "pattern": "Converting real numbers to integers when decimal precision is no longer needed"
+  },
+  {
+    "module": "Real",
+    "name": "+",
+    "type": "function",
+    "signature": "val (+) : real -> real -> real",
+    "doc": "Adds two real numbers",
+    "pattern": "Performing exact decimal addition without floating point errors"
+  },
+  {
+    "module": "Real",
+    "name": "-",
+    "type": "function",
+    "signature": "val (-) : real -> real -> real",
+    "doc": "Subtracts two real numbers",
+    "pattern": "Performing exact decimal subtraction without floating point errors"
+  },
+  {
+    "module": "Real",
+    "name": "~-",
+    "type": "function",
+    "signature": "val (~-) : real -> real",
+    "doc": "Negates a real number",
+    "pattern": "Changing the sign of a real number while preserving its magnitude"
+  },
+  {
+    "module": "Real",
+    "name": "*",
+    "type": "function",
+    "signature": "val (*) : real -> real -> real",
+    "doc": "Multiplies two real numbers",
+    "pattern": "Performing exact decimal multiplication without floating point errors"
+  },
+  {
+    "module": "Real",
+    "name": "/",
+    "type": "function",
+    "signature": "val (/) : real -> real -> real",
+    "doc": "Divides two real numbers",
+    "pattern": "Performing exact decimal division without floating point errors"
+  },
+  {
+    "module": "Real",
+    "name": "<",
+    "type": "function",
+    "signature": "val (<) : real -> real -> bool",
+    "doc": "Tests if one real number is less than another",
+    "pattern": "Comparing real numbers for strict ordering relationships"
+  },
+  {
+    "module": "Real",
+    "name": "<=",
+    "type": "function",
+    "signature": "val (<=) : real -> real -> bool",
+    "doc": "Tests if one real number is less than or equal to another",
+    "pattern": "Comparing real numbers for non-strict ordering relationships"
+  },
+  {
+    "module": "Int",
+    "name": "/",
+    "type": "function",
+    "signature": "val (/) : int -> int -> int",
+    "doc": "Division operator for integers",
+    "pattern": "Integer division with truncation toward zero"
+  },
+  {
+    "module": "Real",
+    "name": ">",
+    "type": "function",
+    "signature": "val (>) : real -> real -> bool",
+    "doc": "Tests if one real number is greater than another",
+    "pattern": "Comparing real numbers for strict ordering relationships"
+  },
+  {
+    "module": "Real",
+    "name": ">=",
+    "type": "function",
+    "signature": "val (>=) : real -> real -> bool",
+    "doc": "Tests if one real number is greater than or equal to another",
+    "pattern": "Comparing real numbers for non-strict ordering relationships"
+  },
+  {
+    "module": "Real",
+    "name": "abs",
+    "type": "function",
+    "signature": "val abs : real -> real",
+    "doc": "Returns the absolute value of real number [r]",
+    "pattern": "Getting the magnitude of a real number regardless of sign"
+  },
+  {
+    "module": "Real",
+    "name": "min",
+    "type": "function",
+    "signature": "val min : real -> real -> real",
+    "doc": "Returns the minimum of two real numbers",
+    "pattern": "Finding the smaller of two real numbers in comparisons"
+  },
+  {
+    "module": "Real",
+    "name": "max",
+    "type": "function",
+    "signature": "val max : real -> real -> real",
+    "doc": "Returns the maximum of two real numbers",
+    "pattern": "Finding the larger of two real numbers in comparisons"
+  },
+  {
+    "module": "Real",
+    "name": "of_float",
+    "type": "function",
+    "signature": "val of_float : float -> real",
+    "doc": "Converts a float [f] to a real number",
+    "pattern": "Converting approximate floating point numbers to exact real numbers"
+  },
+  {
+    "module": "Real",
+    "name": "pow",
+    "type": "function",
+    "signature": "val pow : real -> int -> real",
+    "doc": "Raises real number [base] to integer power [exp]",
+    "pattern": "Computing exact integer powers of real numbers"
+  },
+  {
+    "module": "String",
+    "name": "t",
+    "type": "type",
+    "signature": "type String.t = string",
+    "doc": "These strings correspond to OCaml native strings, and do not have a particular unicode encoding. Rather, they should be seen as sequences of bytes, and it is also this way that Imandra considers them.",
+    "pattern": null
+  },
+  {
+    "module": "String",
+    "name": "empty",
+    "type": "function",
+    "signature": "val empty : string",
+    "doc": "Returns an empty string",
+    "pattern": "Initializing an empty string, like \"\" in other languages"
+  },
+  {
+    "module": "String",
+    "name": "length",
+    "type": "function",
+    "signature": "val length : String.t -> int",
+    "doc": "Length of the string, i.e. its number of bytes",
+    "pattern": "Getting string length, similar to .length or len() in other languages"
+  },
+  {
+    "module": "String",
+    "name": "append",
+    "type": "function",
+    "signature": "val append : String.t -> String.t -> String.t",
+    "doc": "String concatenation",
+    "pattern": "Joining two strings together, like + operator or concat() in other languages"
+  },
+  {
+    "module": "String",
+    "name": "concat",
+    "type": "function",
+    "signature": "val concat : string -> String.t list -> string",
+    "doc": "[concat sep l] concatenates strings in [l] with [sep] inserted between each element. - [concat sep [] = \"\"]\n- [concat sep [x] = x]\n- [concat sep [x;y] = x ^ sep ^ y]\n- [concat sep (x :: tail) = x ^ sep ^ concat sep tail]",
+    "pattern": "Joining array/list of strings with separator, like join() or String.join() in other languages"
+  },
+  {
+    "module": "String",
+    "name": "prefix",
+    "type": "function",
+    "signature": "val prefix : String.t -> String.t -> bool",
+    "doc": "[prefix a b] returns [true] iff [a] is a prefix of [b] (or if [a=b])",
+    "pattern": "Checking if string starts with another string, like startsWith() in other languages"
+  },
+  {
+    "module": "String",
+    "name": "suffix",
+    "type": "function",
+    "signature": "val suffix : String.t -> String.t -> bool",
+    "doc": "[suffix a b] returns [true] iff [a] is a suffix of [b] (or if [a=b])",
+    "pattern": "Checking if string ends with another string, like endsWith() in other languages"
+  },
+  {
+    "module": "String",
+    "name": "contains",
+    "type": "function",
+    "signature": "val contains : String.t -> String.t -> bool",
+    "doc": "[String.contains s1 s2] tests if [s2] appears as a substring within [s1]",
+    "pattern": "Checking if string contains substring, like includes() or contains() in other languages"
+  },
+  {
+    "module": "String",
+    "name": "unsafe_sub",
+    "type": "function",
+    "signature": "val unsafe_sub : String.t -> int -> int -> String.t",
+    "doc": "[String.unsafe_sub s pos len] extracts substring of [s] starting at [pos] of length [len]. No bounds checking - use [String.sub] for safe substring extraction",
+    "pattern": "Low-level substring extraction without bounds checking, like internal substring operations"
+  },
+  {
+    "module": "String",
+    "name": "sub",
+    "type": "function",
+    "signature": "val sub : string -> int -> int -> String.t option",
+    "doc": "[String.sub s i len] returns the string [s[i], s[i+1],…,s[i+len-1]].",
+    "pattern": "Safe substring extraction with bounds checking, like substring() in other languages"
+  },
+  {
+    "module": "String",
+    "name": "of_int",
+    "type": "function",
+    "signature": "val of_int : int -> string",
+    "doc": "String representation of an integer",
+    "pattern": "Converting integer to string, like toString() or str() in other languages"
+  },
+  {
+    "module": "String",
+    "name": "unsafe_to_nat",
+    "type": "function",
+    "signature": "val unsafe_to_nat : String.t -> int",
+    "doc": "[String.unsafe_to_nat s] converts string [s] to natural number without validation. Use [String.to_nat] for safe conversion",
+    "pattern": "Low-level string to number conversion without validation"
+  },
+  {
+    "module": "String",
+    "name": "to_nat",
+    "type": "function",
+    "signature": "val to_nat : string -> int option",
+    "doc": "Parse a string into a nonnegative number, or return [None]",
+    "pattern": "Safe conversion of string to natural number, like parseInt() with validation"
+  },
+  {
+    "module": "String",
+    "name": "is_nat",
+    "type": "function",
+    "signature": "val is_nat : string -> bool",
+    "doc": "[String.is_nat s] tests if string [s] represents a valid natural number",
+    "pattern": "Validating if string represents non-negative integer, like input validation"
+  },
+  {
+    "module": "String",
+    "name": "is_int",
+    "type": "function",
+    "signature": "val is_int : string -> bool",
+    "doc": "[String.is_int s] tests if string [s] represents a valid integer",
+    "pattern": "Validating if string represents any integer (positive/negative), like input validation"
+  },
+  {
+    "module": "String",
+    "name": "unsafe_to_int",
+    "type": "function",
+    "signature": "val unsafe_to_int : string -> int",
+    "doc": "[String.unsafe_to_int s] converts string [s] to integer without validation. Use [String.to_int] for safe conversion",
+    "pattern": "Low-level string to integer conversion without validation"
+  },
+  {
+    "module": "String",
+    "name": "to_int",
+    "type": "function",
+    "signature": "val to_int : string -> int option",
+    "doc": "[String.to_int s] safely converts string [s] to integer. Returns None if [s] is not a valid integer",
+    "pattern": "Safe conversion of string to integer with validation, like parseInt() with error handling"
+  },
+  {
+    "module": "Option",
+    "name": "t",
+    "type": "type",
+    "signature": "type 'a t = 'a option",
+    "doc": "The option type representing optional values. Can be either [None] representing absence of a value, or [Some x] containing a value [x] of type ['a].",
+    "pattern": null
+  },
+  {
+    "module": "Option",
+    "name": "map",
+    "type": "function",
+    "signature": "val map : ('a -> 'b) -> 'a option -> 'b option",
+    "doc": "Transforms an optional value by applying function [f] to the contained value. If [x] is [None], returns [None]. If [x] is [Some v], returns [Some (f v)]. This allows transforming the value while preserving the optional structure.",
+    "pattern": "Transforming optional values without having to explicitly handle the None case"
+  },
+  {
+    "module": "Int",
+    "name": "mod",
+    "type": "function",
+    "signature": "val (mod) : int -> int -> int",
+    "doc": "Modulo operator for integers",
+    "pattern": "Computing remainders and wrapping values"
+  },
+  {
+    "module": "Int",
+    "name": "<",
+    "type": "function",
+    "signature": "val (<) : int -> int -> bool",
+    "doc": "Less than comparison operator",
+    "pattern": "Numeric ordering comparison"
+  },
+  {
+    "module": "Option",
+    "name": "map_or",
+    "type": "function",
+    "signature": "val map_or : default:'a -> ('b -> 'a) -> 'b option -> 'a",
+    "doc": "Transforms an optional value into a definite value. If [x] is [Some v], applies [f] to [v]. If [x] is [None], returns the [default] value. This ensures a value is always returned, handling the None case with a default.",
+    "pattern": "Converting optional values to non-optional with a fallback value"
+  },
+  {
+    "module": "Option",
+    "name": "is_some",
+    "type": "function",
+    "signature": "val is_some : 'a option -> bool",
+    "doc": "Checks if an option contains a value. Returns [true] if [x] is [Some _], [false] if [x] is [None]. Useful for checking presence of optional values without extracting them.",
+    "pattern": "Testing if an optional value is present before attempting to use it"
+  },
+  {
+    "module": "Option",
+    "name": "is_none",
+    "type": "function",
+    "signature": "val is_none : 'a option -> bool",
+    "doc": "Checks if an option is empty. Returns [true] if [x] is [None], [false] if [x] is [Some _]. Complement of [Option.is_some].",
+    "pattern": "Testing if an optional value is absent/null/undefined"
+  },
+  {
+    "module": "Option",
+    "name": "return",
+    "type": "function",
+    "signature": "val return : 'a -> 'a option",
+    "doc": "Wraps a value in [Some] constructor. This is the fundamental way to create an optional value containing something. Always returns [Some x] for any input [x].",
+    "pattern": "Converting regular values into optional values for optional-aware functions"
+  },
+  {
+    "module": "Option",
+    "name": ">|=",
+    "type": "function",
+    "signature": "val (>|=) : 'a option -> ('a -> 'b) -> 'b option",
+    "doc": "An infix operator version of [Option.map]. Allows writing [x >|= f] instead of [Option.map f x] for more natural composition syntax.",
+    "pattern": "Chaining transformations on optional values in a pipeline style"
+  },
+  {
+    "module": "Option",
+    "name": "flat_map",
+    "type": "function",
+    "signature": "val flat_map : ('a -> 'b option) -> 'a option -> 'b option",
+    "doc": "Applies a function that returns an option to an optional value. If [x] is [None], returns [None]. If [x] is [Some v], returns [f v]. Used for composing operations that may each produce optional results.",
+    "pattern": "Chaining multiple operations that each might fail/return nothing"
+  },
+  {
+    "module": "Option",
+    "name": ">>=",
+    "type": "function",
+    "signature": "val (>>=) : 'a option -> ('a -> 'b option) -> 'b option",
+    "doc": "An infix operator version of [Option.flat_map]. Allows writing [x >>= f] instead of [Option.flat_map f x]. Standard monadic bind operator for options.",
+    "pattern": "Chaining optional computations in a pipeline style"
+  },
+  {
+    "module": "Option",
+    "name": "or_",
+    "type": "function",
+    "signature": "val or_ : 'a option -> 'a option -> 'a option",
+    "doc": "Provides a fallback option. Returns [a] if it contains a value, otherwise returns [b]. Useful for providing default optional values.",
+    "pattern": "Providing fallback values when the primary optional value is None"
+  },
+  {
+    "module": "Option",
+    "name": "<+>",
+    "type": "function",
+    "signature": "val (<+>) : 'a option -> 'a option -> 'a option",
+    "doc": "An infix operator version of [Option.or_]. Allows writing [a <+> b] instead of [Option.or_ a b] for more natural fallback syntax.",
+    "pattern": "Chaining multiple fallback options in order of preference"
+  },
+  {
+    "module": "Option",
+    "name": "exists",
+    "type": "function",
+    "signature": "val exists : ('a -> bool) -> 'a option -> bool",
+    "doc": "Tests if the value in an option satisfies a predicate. Returns [false] if [x] is [None], otherwise returns [p v] where [v] is the contained value. Similar to [List.exists] but for a single optional value.",
+    "pattern": "Testing properties of optional values without explicit None handling"
+  },
+  {
+    "module": "Option",
+    "name": "for_all",
+    "type": "function",
+    "signature": "val for_all : ('a -> bool) -> 'a option -> bool",
+    "doc": "Tests if the value in an option satisfies a predicate. Returns [true] if [x] is [None], otherwise returns [p v] where [v] is the contained value. Similar to [List.for_all] but for a single optional value.",
+    "pattern": "Validating properties of optional values with None considered valid"
+  },
+  {
+    "module": "Option",
+    "name": "get_or",
+    "type": "function",
+    "signature": "val get_or : default:'a -> 'a option -> 'a",
+    "doc": "Safely extracts the value from an option with a fallback. Returns the value contained in [x] if present, otherwise returns the [default] value. Ensures a value is always returned without risk of exceptions.",
+    "pattern": "Safely extracting values from optionals with a default value"
+  },
+  {
+    "module": "Option",
+    "name": "fold",
+    "type": "function",
+    "signature": "val fold : ('a -> 'b -> 'a) -> 'a -> 'b option -> 'a",
+    "doc": "Reduces an optional value using an accumulator. If [x] is [None], returns [acc] unchanged. If [x] is [Some v], returns [f acc v]. Similar to [List.fold_left] but for a single optional value.",
+    "pattern": "Accumulating/reducing optional values into a single result"
+  },
+  {
+    "module": "Option",
+    "name": "<$>",
+    "type": "function",
+    "signature": "val (<$>) : ('a -> 'b) -> 'a option -> 'b option",
+    "doc": "An infix operator alias for [Option.map f x]. Provides applicative functor syntax for mapping over options.",
+    "pattern": "Applying functions to optional values in a functional style"
+  },
+  {
+    "module": "Option",
+    "name": "monoid_product",
+    "type": "function",
+    "signature": "val monoid_product : 'a option -> 'b option -> ('a * 'b) option",
+    "doc": "Combines two options into a tuple option. Returns [Some (x,y)] if both inputs contain values, [None] if either is [None]. Used for combining independent optional computations.",
+    "pattern": "Combining multiple optional values that all must be present"
+  },
+  {
+    "module": "Option",
+    "name": "let+",
+    "type": "function",
+    "signature": "val let+ : 'a option -> ('a -> 'b) -> 'b option",
+    "doc": "A binding operator alias for [Option.>|=]. Provides syntactic sugar for mapping over options in let-binding syntax.",
+    "pattern": "Transforming optional values in a let-binding style"
+  },
+  {
+    "module": "Option",
+    "name": "and+",
+    "type": "function",
+    "signature": "val and+ : 'a option -> 'b option -> ('a * 'b) option",
+    "doc": "A binding operator alias for [Option.monoid_product]. Provides syntactic sugar for combining options in let-binding syntax.",
+    "pattern": "Combining multiple optional values in a let-binding style"
+  },
+  {
+    "module": "Option",
+    "name": "let*",
+    "type": "function",
+    "signature": "val let* : 'a option -> ('a -> 'b option) -> 'b option",
+    "doc": "A binding operator alias for [Option.>>=]. Provides monadic let-binding syntax for sequencing optional computations.",
+    "pattern": "Chaining optional computations in a let-binding style"
+  },
+  {
+    "module": "Option",
+    "name": "and*",
+    "type": "function",
+    "signature": "val and* : 'a option -> 'b option -> ('a * 'b) option",
+    "doc": "A binding operator alias for [Option.monoid_product]. Alternative syntax for combining options in monadic let-binding style.",
+    "pattern": "Combining multiple optional values in a monadic let-binding style"
+  },
+  {
+    "module": "Int",
+    "name": "+",
+    "type": "function",
+    "signature": "val (+) : int -> int -> int",
+    "doc": "Addition operator for integers",
+    "pattern": "Basic arithmetic addition"
+  },
+  {
+    "module": "Int",
+    "name": "-",
+    "type": "function",
+    "signature": "val (-) : int -> int -> int",
+    "doc": "Subtraction operator for integers",
+    "pattern": "Basic arithmetic subtraction"
+  },
+  {
+    "module": "Int",
+    "name": "~-",
+    "type": "function",
+    "signature": "val (~-) : int -> int",
+    "doc": "Unary negation operator for integers",
+    "pattern": "Negating a number"
+  },
+  {
+    "module": "Int",
+    "name": "*",
+    "type": "function",
+    "signature": "val (*) : int -> int -> int",
+    "doc": "Multiplication operator for integers",
+    "pattern": "Basic arithmetic multiplication"
+  },
+  {
+    "module": "Int",
+    "name": "<=",
+    "type": "function",
+    "signature": "val (<=) : int -> int -> bool",
+    "doc": "Less than or equal comparison operator",
+    "pattern": "Numeric ordering and equality comparison"
+  },
+  {
+    "module": "Int",
+    "name": ">",
+    "type": "function",
+    "signature": "val (>) : int -> int -> bool",
+    "doc": "Greater than comparison operator",
+    "pattern": "Numeric ordering comparison"
+  },
+  {
+    "module": "Int",
+    "name": ">=",
+    "type": "function",
+    "signature": "val (>=) : int -> int -> bool",
+    "doc": "Greater than or equal comparison operator",
+    "pattern": "Numeric ordering and equality comparison"
+  },
+  {
+    "module": "Int",
+    "name": "min",
+    "type": "function",
+    "signature": "val min : int -> int -> int",
+    "doc": "Returns the minimum of two integers",
+    "pattern": "Finding smaller of two values"
+  },
+  {
+    "module": "Int",
+    "name": "max",
+    "type": "function",
+    "signature": "val max : int -> int -> int",
+    "doc": "Returns the maximum of two integers",
+    "pattern": "Finding larger of two values"
+  },
+  {
+    "module": "Int",
+    "name": "abs",
+    "type": "function",
+    "signature": "val abs : int -> int",
+    "doc": "Returns absolute value of an integer",
+    "pattern": "Getting magnitude of a number"
+  },
+  {
+    "module": "Int",
+    "name": "to_string",
+    "type": "function",
+    "signature": "val to_string : int -> string",
+    "doc": "Converts non-negative integer to string representation",
+    "pattern": "String formatting and display of numbers"
+  },
+  {
+    "module": "Int",
+    "name": "compare",
+    "type": "function",
+    "signature": "val compare : int -> int -> int",
+    "doc": "Returns -1 if x < y, 0 if x = y, 1 if x > y",
+    "pattern": "Three-way comparison for sorting and ordering"
+  },
+  {
+    "module": "Int",
+    "name": "equal",
+    "type": "function",
+    "signature": "val equal : 'a -> 'a -> bool",
+    "doc": "Tests equality of two integers",
+    "pattern": "Value equality comparison"
+  },
+  {
+    "module": "Int",
+    "name": "pow",
+    "type": "function",
+    "signature": "val pow : int -> int -> int",
+    "doc": "Computes x raised to power n",
+    "pattern": "Exponential calculations",
+    "note-on-writing-proofs": "`Int.pow` can be difficult to reason about in proofs. If you need to prove properties involving exponentiation (e.g., `2^(n+1) = 2 * 2^n`), consider defining your own `pow` function:\n```iml\nlet rec pow (a:int) (n:int) : int =\n  if n <= 0 then 1 else a * pow a (n - 1)\n[@@measure (Ordinal.of_int n)] [@@by auto]\n```\nThen prove helper lemmas like `pow_succ` with `[@@rw]` annotations so `auto` can use them.\n"
+  },
+  {
+    "module": "LChar",
+    "name": "t",
+    "type": "type",
+    "signature": "type LChar.t =\nLChar.Char of bool * bool * bool * bool * bool * bool * bool * bool",
+    "doc": "An 8-bit character",
+    "pattern": null
+  },
+  {
+    "module": "LChar",
+    "name": "zero",
+    "type": "function",
+    "signature": "val zero : LChar.t",
+    "doc": "Returns a character with all bits set to false (null character)",
+    "pattern": "Creating a null/zero character, like '\\0' or character code 0 in other languages"
+  },
+  {
+    "module": "LChar",
+    "name": "is_printable",
+    "type": "function",
+    "signature": "val is_printable : LChar.t -> bool",
+    "doc": "Tests if character [c] is printable based on its bit pattern",
+    "pattern": "Checking if a character is displayable/printable, like isprint() or similar character classification functions"
+  },
+  {
+    "module": "List",
+    "name": "t",
+    "type": "type",
+    "signature": "type 'a t = 'a list",
+    "doc": "list",
+    "pattern": null
+  },
+  {
+    "module": "List",
+    "name": "empty",
+    "type": "function",
+    "signature": "val empty : 'a list",
+    "doc": "Returns an empty list",
+    "pattern": "Creating an empty list, initializing a new list with no elements"
+  },
+  {
+    "module": "List",
+    "name": "is_empty",
+    "type": "function",
+    "signature": "val is_empty : 'a list -> bool",
+    "doc": "Tests whether list [l] is empty",
+    "pattern": "Checking if a list has no elements"
+  },
+  {
+    "module": "List",
+    "name": "cons",
+    "type": "function",
+    "signature": "val cons : 'a -> 'a list -> 'a list",
+    "doc": "Prepends [x] to the beginning of [l], returning a new list",
+    "pattern": "Adding an element to the front of a list"
+  },
+  {
+    "module": "List",
+    "name": "return",
+    "type": "function",
+    "signature": "val return : 'a -> 'a list",
+    "doc": "Creates a singleton list containing only [x]",
+    "pattern": "Creating a single-element list"
+  },
+  {
+    "module": "List",
+    "name": "hd",
+    "type": "function",
+    "signature": "val hd : 'a list -> 'a",
+    "doc": "Returns the first element of list [l]. Partial function that fails on empty lists. But it is recommended to rely on pattern matching instead",
+    "pattern": "Getting first element of list, with no safety check"
+  },
+  {
+    "module": "List",
+    "name": "tl",
+    "type": "function",
+    "signature": "val tl : 'a list -> 'a list",
+    "doc": "Returns the list [l] without its first element. Partial function that fails on empty lists. But it is recommended to rely on pattern matching instead",
+    "pattern": "Getting all elements except first, with no safety check"
+  },
+  {
+    "module": "List",
+    "name": "head_opt",
+    "type": "function",
+    "signature": "val head_opt : 'a list -> 'a option",
+    "doc": "Returns [Some x] where [x] is the first element of [l], or [None] if [l] is empty",
+    "pattern": "Safely getting first element of list with null check"
+  },
+  {
+    "module": "List",
+    "name": "append",
+    "type": "function",
+    "signature": "val append : 'a list -> 'a list -> 'a list",
+    "doc": "Returns a list composed of all elements of [l1], followed by all elements of [l2]",
+    "pattern": "Concatenating two lists together"
+  },
+  {
+    "module": "List",
+    "name": "rev",
+    "type": "function",
+    "signature": "val rev : 'a list -> 'a list",
+    "doc": "Returns a new list with all elements of [l] in reverse order",
+    "pattern": "Reversing order of elements in list"
+  },
+  {
+    "module": "List",
+    "name": "length",
+    "type": "function",
+    "signature": "val length : 'a list -> int",
+    "doc": "Returns the number of elements in list [l]. Linear time",
+    "pattern": "Getting number of elements in list"
+  },
+  {
+    "module": "List",
+    "name": "split",
+    "type": "function",
+    "signature": "val split : ('a * 'b) list -> 'a list * 'b list",
+    "doc": "Takes a list of pairs and returns a pair of lists",
+    "pattern": "Converting list of tuples into tuple of lists"
+  },
+  {
+    "module": "List",
+    "name": "map",
+    "type": "function",
+    "signature": "val map : ('a -> 'b) -> 'a list -> 'b list",
+    "doc": "Applies function [f] to each element of [l] and returns the resulting list.",
+    "pattern": "Transforming each element of list using a function"
+  },
+  {
+    "module": "List",
+    "name": "map2",
+    "type": "function",
+    "signature": "val map2 : ('c -> 'a -> 'b) -> 'c list -> 'a list -> ('b list, string) result",
+    "doc": "Maps function [f] over pairs of elements from [l1] and [l2]. Returns [Error] if lists have different lengths",
+    "pattern": "Combining elements from two lists using a function"
+  },
+  {
+    "module": "List",
+    "name": "for_all",
+    "type": "function",
+    "signature": "val for_all : ('a -> bool) -> 'a list -> bool",
+    "doc": "Tests whether all elements of [l] satisfy predicate [f]",
+    "pattern": "Testing if condition holds for all elements"
+  },
+  {
+    "module": "List",
+    "name": "exists",
+    "type": "function",
+    "signature": "val exists : ('a -> bool) -> 'a list -> bool",
+    "doc": "Tests whether there exists an element in [l] that satisfies predicate [f]",
+    "pattern": "Testing if condition holds for at least one element"
+  },
+  {
+    "module": "List",
+    "name": "fold_left",
+    "type": "function",
+    "signature": "val fold_left : ('b -> 'a -> 'b) -> 'b -> 'a list -> 'b",
+    "doc": "Folds list [l] from left to right using function [f] and initial accumulator [acc]",
+    "pattern": "Reducing list to single value by processing elements left-to-right"
+  },
+  {
+    "module": "List",
+    "name": "fold_right",
+    "type": "function",
+    "signature": "val fold_right : ('b -> 'a -> 'a) -> 'b list -> 'a -> 'a",
+    "doc": "Folds list [l] from right to left using function [f] and initial accumulator [acc]",
+    "pattern": "Reducing list to single value by processing elements right-to-left"
+  },
+  {
+    "module": "List",
+    "name": "mapi",
+    "type": "function",
+    "signature": "val mapi : (int -> 'b -> 'a) -> 'b list -> 'a list",
+    "doc": "Maps function [f] over list [l], passing both the element and its index to [f]",
+    "pattern": "Transforming elements with access to their position/index"
+  },
+  {
+    "module": "List",
+    "name": "filter",
+    "type": "function",
+    "signature": "val filter : ('a -> bool) -> 'a list -> 'a list",
+    "doc": "Keeps only the elements of [l] that satisfy [f]",
+    "pattern": "Filtering elements from a collection based on a condition"
+  },
+  {
+    "module": "Multiset",
+    "name": "t",
+    "type": "type",
+    "signature": "type Multiset.t = ('a, int) Map.t",
+    "doc": "The multiset type, implemented as a map from elements to their occurrence counts. Each element is associated with an integer representing how many times it appears in the multiset.",
+    "pattern": null
+  },
+  {
+    "module": "List",
+    "name": "filter_map",
+    "type": "function",
+    "signature": "val filter_map : ('a -> 'b option) -> 'a list -> 'b list",
+    "doc": "Applies [f] to each element of [l]. If [f] returns [Some y], keeps [y] in result list. If [f] returns [None], that element is dropped",
+    "pattern": "Combined filtering and transformation of elements, like filter().map() or comprehensions"
+  },
+  {
+    "module": "List",
+    "name": "flat_map",
+    "type": "function",
+    "signature": "val flat_map : ('b -> 'a list) -> 'b list -> 'a list",
+    "doc": "Applies [f] to each element of [l] and concatenates all resulting lists",
+    "pattern": "Mapping elements to lists and flattening results, like flatMap() or SelectMany()"
+  },
+  {
+    "module": "List",
+    "name": "find",
+    "type": "function",
+    "signature": "val find : ('a -> bool) -> 'a list -> 'a option",
+    "doc": "Returns [Some x] if [x] is the first element of [l] such that [f x] is true. Otherwise it returns [None]",
+    "pattern": "Finding first element matching condition, like find() or First()"
+  },
+  {
+    "module": "List",
+    "name": "mem",
+    "type": "function",
+    "signature": "val mem : 'a -> 'a list -> bool",
+    "doc": "Returns [true] iff [x] is an element of [l]",
+    "pattern": "Testing if value exists in collection, like includes() or contains()"
+  },
+  {
+    "module": "List",
+    "name": "mem_assoc",
+    "type": "function",
+    "signature": "val mem_assoc : 'a -> ('a * 'b) list -> bool",
+    "doc": "Returns [true] if [x] appears as a key in association list [l]",
+    "pattern": "Testing if key exists in key-value pairs, like hasKey() or containsKey()"
+  },
+  {
+    "module": "List",
+    "name": "nth",
+    "type": "function",
+    "signature": "val nth : int -> 'a list -> 'a option",
+    "doc": "Returns [Some x] where [x] is the nth element of [l], or [None] if list is too short",
+    "pattern": "Safe indexed access to collection elements, like get() or ElementAt()"
+  },
+  {
+    "module": "List",
+    "name": "assoc",
+    "type": "function",
+    "signature": "val assoc : 'a -> ('a * 'b) list -> 'b option",
+    "doc": "Returns [Some v] if [(x,v)] appears in association list [l], [None] otherwise",
+    "pattern": "Looking up values by key in key-value pairs, like get() or TryGetValue()"
+  },
+  {
+    "module": "List",
+    "name": "bounded_recons",
+    "type": "function",
+    "signature": "val bounded_recons : int -> 'a list -> 'a list",
+    "doc": "Like [List.take n l], but measured subset is [n] instead of [l]",
+    "pattern": "Taking first N elements with focus on count rather than input"
+  },
+  {
+    "module": "List",
+    "name": "take",
+    "type": "function",
+    "signature": "val take : int -> 'a list -> 'a list",
+    "doc": "Returns a list composed of the first (at most) [n] elements of [l]. If [length l <= n] then it returns [l]",
+    "pattern": "Taking first N elements from collection, like take() or slice(0,n)"
+  },
+  {
+    "module": "List",
+    "name": "drop",
+    "type": "function",
+    "signature": "val drop : int -> 'a list -> 'a list",
+    "doc": "Returns [l] where the first (at most) [n] elements have been removed. If [length l <= n] then it returns [[]]",
+    "pattern": "Skipping first N elements from collection, like skip() or slice(n)"
+  },
+  {
+    "module": "List",
+    "name": "range",
+    "type": "function",
+    "signature": "val range : int -> int -> int list",
+    "doc": "Integer range. [List.range i j] is the list [[i; i+1; i+2; …; j-1]]. Returns the empty list if [i >= j]",
+    "pattern": "Generating sequence of integers, like range() or Enumerable.Range()"
+  },
+  {
+    "module": "List",
+    "name": "insert_sorted",
+    "type": "function",
+    "signature": "val insert_sorted : leq:('a -> 'a -> bool) -> 'a -> 'a list -> 'a list",
+    "doc": "Inserts [x] in [l], keeping [l] sorted according to [leq]",
+    "pattern": "Inserting element while maintaining sort order"
+  },
+  {
+    "module": "List",
+    "name": "sort",
+    "type": "function",
+    "signature": "val sort : leq:('a -> 'a -> bool) -> 'a list -> 'a list",
+    "doc": "Sorts list [l] according to [leq] ordering",
+    "pattern": "Sorting collection with custom comparison"
+  },
+  {
+    "module": "List",
+    "name": "is_sorted",
+    "type": "function",
+    "signature": "val is_sorted : leq:('a -> 'a -> bool) -> 'a list -> bool",
+    "doc": "Checks whether list [l] is sorted according to [leq] ordering",
+    "pattern": "Testing if collection is in sorted order"
+  },
+  {
+    "module": "List",
+    "name": "monoid_product",
+    "type": "function",
+    "signature": "val monoid_product : 'a list -> 'b list -> ('a * 'b) list",
+    "doc": "Returns list of all pairs [(x,y)] where [x] comes from [l1] and [y] from [l2]",
+    "pattern": "Cartesian product of two collections"
+  },
+  {
+    "module": "List",
+    "name": ">|=",
+    "type": "function",
+    "signature": "val (>|=) : 'a list -> ('a -> 'b) -> 'b list",
+    "doc": "Infix operator alias for [List.map]",
+    "pattern": "Infix syntax for mapping/transforming elements"
+  },
+  {
+    "module": "List",
+    "name": ">>=",
+    "type": "function",
+    "signature": "val (>>=) : 'b list -> ('b -> 'a list) -> 'a list",
+    "doc": "Infix operator alias for [List.flat_map]",
+    "pattern": "Infix syntax for flat mapping elements"
+  },
+  {
+    "module": "List",
+    "name": "let+",
+    "type": "function",
+    "signature": "val let+ : 'b list -> ('b -> 'a) -> 'a list",
+    "doc": "Alias for [List.>|=]",
+    "pattern": "Alternative syntax for mapping in monadic contexts"
+  },
+  {
+    "module": "List",
+    "name": "and+",
+    "type": "function",
+    "signature": "val and+ : 'a list -> 'b list -> ('a * 'b) list",
+    "doc": "Alias for [List.monoid_product]",
+    "pattern": "Alternative syntax for cartesian product in applicative contexts"
+  },
+  {
+    "module": "List",
+    "name": "let*",
+    "type": "function",
+    "signature": "val let* : 'b list -> ('b -> 'a list) -> 'a list",
+    "doc": "Alias for [List.>>=]",
+    "pattern": "Alternative syntax for flat mapping in monadic contexts"
+  },
+  {
+    "module": "List",
+    "name": "and*",
+    "type": "function",
+    "signature": "val and* : 'a list -> 'b list -> ('a * 'b) list",
+    "doc": "Alias for [List.monoid_product]",
+    "pattern": "Alternative syntax for cartesian product in applicative contexts"
+  },
+  {
+    "module": "Map",
+    "name": "t",
+    "type": "type",
+    "signature": "type Map.t = {| l : ('a * 'b) list; | default : 'b}",
+    "doc": "The map type representing a key-value mapping where each key is associated with exactly one value",
+    "pattern": null
+  },
+  {
+    "module": "Map",
+    "name": "const",
+    "type": "function",
+    "signature": "val const : 'b -> ('a, 'b) Map.t",
+    "doc": "Creates a constant map that maps every key to the same value [v]",
+    "pattern": "Initializing maps with a default value for all possible keys, useful for creating maps with a uniform base value"
+  },
+  {
+    "module": "Map",
+    "name": "add'",
+    "type": "function",
+    "signature": "val add' : ('a, 'b) Map.t -> 'a -> 'b -> ('a, 'b) Map.t",
+    "doc": "Adds or updates the binding from key [k] to value [v] in map [m]",
+    "pattern": "Adding or updating key-value pairs in a map with map-first argument order"
+  },
+  {
+    "module": "Map",
+    "name": "add",
+    "type": "function",
+    "signature": "val add : 'a -> 'b -> ('a, 'b) Map.t -> ('a, 'b) Map.t",
+    "doc": "Adds or updates the binding from key [k] to value [v] in map [m]",
+    "pattern": "Adding or updating key-value pairs in a map with key-first argument order, similar to dictionary updates in other languages"
+  },
+  {
+    "module": "Map",
+    "name": "get_default",
+    "type": "function",
+    "signature": "val get_default : ('a, 'b) Map.t -> 'b",
+    "doc": "Returns the default value associated with map [m]",
+    "pattern": "Retrieving the default value used for keys not explicitly set in the map"
+  },
+  {
+    "module": "Map",
+    "name": "get'",
+    "type": "function",
+    "signature": "val get' : ('a, 'b) Map.t -> 'a -> 'b",
+    "doc": "Retrieves the value associated with key [k] in map [m]",
+    "pattern": "Looking up values by key in a map with map-first argument order"
+  },
+  {
+    "module": "Map",
+    "name": "get",
+    "type": "function",
+    "signature": "val get : 'a -> ('a, 'b) Map.t -> 'b",
+    "doc": "Retrieves the value associated with key [k] in map [m]",
+    "pattern": "Looking up values by key in a map with key-first argument order, similar to dictionary lookups in other languages"
+  },
+  {
+    "module": "Map",
+    "name": "of_list",
+    "type": "function",
+    "signature": "val of_list : 'b -> ('a * 'b) list -> ('a, 'b) Map.t",
+    "doc": "Creates a map from a list [l] of key-value pairs, using [default] as the value for keys not in the list",
+    "pattern": "Converting a list of key-value pairs into a map, commonly used when initializing a map from existing data"
+  },
+  {
+    "module": "Multiset",
+    "name": "empty",
+    "type": "function",
+    "signature": "val empty : ('a, int) Map.t",
+    "doc": "Creates an empty multiset where all possible elements implicitly have a count of 0. This serves as the starting point for building multisets.",
+    "pattern": "Initializing a new multiset before adding elements, similar to creating an empty array or list in other languages"
+  },
+  {
+    "module": "Multiset",
+    "name": "add",
+    "type": "function",
+    "signature": "val add : 'a -> ('a, int) Map.t -> ('a, int) Map.t",
+    "doc": "Adds one occurrence of element [x] to multiset [m] by retrieving its current count, incrementing it by 1, and storing the new count. This maintains the multiset property of tracking multiple occurrences.",
+    "pattern": "Incrementing counters for elements, like counting word frequencies or adding items to a shopping cart"
+  },
+  {
+    "module": "Multiset",
+    "name": "find",
+    "type": "function",
+    "signature": "val find : 'a -> ('a, int) Map.t -> int",
+    "doc": "Retrieves the number of occurrences of element [x] in multiset [m]. This is an alias for Map.get that returns the count directly.",
+    "pattern": "Querying how many times an element appears, such as checking inventory levels or word frequencies"
+  },
+  {
+    "module": "Multiset",
+    "name": "mem",
+    "type": "function",
+    "signature": "val mem : 'a -> ('a, int) Map.t -> bool",
+    "doc": "Tests if element [x] exists in multiset [m] by checking if its occurrence count is greater than 0. This distinguishes between elements that are present (count > 0) and absent (count = 0).",
+    "pattern": "Testing if an element exists at least once in the collection, like checking if an item is in stock"
+  },
+  {
+    "module": "Multiset",
+    "name": "remove",
+    "type": "function",
+    "signature": "val remove : 'a -> ('a, int) Map.t -> ('a, int) Map.t",
+    "doc": "Removes one occurrence of element [x] from multiset [m] by decreasing its count by 1, ensuring the count never goes below 0. This maintains the invariant that counts are always non-negative.",
+    "pattern": "Decreasing element counts one at a time, such as removing items from a shopping cart or consuming inventory"
+  },
+  {
+    "module": "Multiset",
+    "name": "of_list",
+    "type": "function",
+    "signature": "val of_list : 'a list -> ('a, int) Map.t",
+    "doc": "Converts a list [l] into a multiset by recursively processing each element. It starts with an empty multiset and adds each element from the list in sequence, building up the occurrence counts.",
+    "pattern": "Converting sequences or collections from other data structures into counted form, like building a frequency table from a list of events"
+  },
+  {
+    "module": "LString",
+    "name": "t",
+    "type": "type",
+    "signature": "type t = LChar.t list",
+    "doc": "A list of logic-mode characters",
+    "pattern": null
+  },
+  {
+    "module": "LString",
+    "name": "empty",
+    "type": "function",
+    "signature": "val empty : LChar.t list",
+    "doc": "Returns an empty string (empty list of characters)",
+    "pattern": "Creating an empty string, like \"\" or empty string literal in other languages"
+  },
+  {
+    "module": "LString",
+    "name": "of_list",
+    "type": "function",
+    "signature": "val of_list : 'a -> 'a",
+    "doc": "Converts a list directly to an LString.t",
+    "pattern": "Converting array/list of characters to string, like String.fromCharArray() or similar"
+  },
+  {
+    "module": "LString",
+    "name": "length",
+    "type": "function",
+    "signature": "val length : LChar.t list -> int",
+    "doc": "Returns the number of characters in string [s]",
+    "pattern": "Getting string length, like .length or len() in other languages"
+  },
+  {
+    "module": "LString",
+    "name": "append",
+    "type": "function",
+    "signature": "val append : LChar.t list -> LChar.t list -> LChar.t list",
+    "doc": "Concatenates strings [s1] and [s2]",
+    "pattern": "Joining two strings together, like + operator or concat() in other languages"
+  },
+  {
+    "module": "LString",
+    "name": "^^",
+    "type": "function",
+    "signature": "val (^^) : LChar.t list -> LChar.t list -> LChar.t list",
+    "doc": "An infix operator alias for LString.append",
+    "pattern": "Infix string concatenation, like + or .. operators in other languages"
+  },
+  {
+    "module": "LString",
+    "name": "for_all",
+    "type": "function",
+    "signature": "val for_all : (LChar.t -> bool) -> LChar.t list -> bool",
+    "doc": "Tests if all characters in [s] satisfy predicate [f]",
+    "pattern": "Checking if all characters match a condition, like every() or all() in other languages"
+  },
+  {
+    "module": "LString",
+    "name": "exists",
+    "type": "function",
+    "signature": "val exists : (LChar.t -> bool) -> LChar.t list -> bool",
+    "doc": "Tests if any character in [s] satisfies predicate [f]",
+    "pattern": "Checking if any character matches a condition, like some() or any() in other languages"
+  },
+  {
+    "module": "LString",
+    "name": "concat",
+    "type": "function",
+    "signature": "val concat : LChar.t list -> LChar.t list list -> LChar.t list",
+    "doc": "Concatenates all strings in list [l], placing [sep] between each",
+    "pattern": "Joining array of strings with separator, like join() or String.join() in other languages"
+  },
+  {
+    "module": "LString",
+    "name": "is_printable",
+    "type": "function",
+    "signature": "val is_printable : LChar.t list -> bool",
+    "doc": "Tests if all characters in [s] are printable",
+    "pattern": "Checking if string contains only printable characters, like string validation"
+  },
+  {
+    "module": "LString",
+    "name": "sub",
+    "type": "function",
+    "signature": "val sub : LChar.t list -> int -> int -> LChar.t list",
+    "doc": "Extracts substring of [s] starting at position [i] of length [len]",
+    "pattern": "Extracting substring, like substring() or slice() in other languages"
+  },
+  {
+    "module": "LString",
+    "name": "prefix",
+    "type": "function",
+    "signature": "val prefix : LChar.t list -> LChar.t list -> bool",
+    "doc": "Tests if [s1] is a prefix of [s2]",
+    "pattern": "Checking if string starts with another string, like startsWith() in other languages"
+  },
+  {
+    "module": "LString",
+    "name": "suffix",
+    "type": "function",
+    "signature": "val suffix : LChar.t list -> LChar.t list -> bool",
+    "doc": "Tests if [s1] is a suffix of [s2]",
+    "pattern": "Checking if string ends with another string, like endsWith() in other languages"
+  },
+  {
+    "module": "LString",
+    "name": "contains",
+    "type": "function",
+    "signature": "val contains : LChar.t list -> LChar.t list -> bool",
+    "doc": "Tests if [s2] appears as a substring within [s1]",
+    "pattern": "Checking if string contains substring, like includes() or contains() in other languages"
+  },
+  {
+    "module": "LString",
+    "name": "take",
+    "type": "function",
+    "signature": "val take : int -> LString.t -> LString.t",
+    "doc": "Returns first [n] characters of string [s]. The [LString.t] version of [List.take]",
+    "pattern": "Taking first N characters from string, like slice(0,n) or substring(0,n) in other languages"
+  },
+  {
+    "module": "LString",
+    "name": "drop",
+    "type": "function",
+    "signature": "val drop : int -> LString.t -> LString.t",
+    "doc": "Removes first [n] characters from string [s]. The [LString.t] version of [List.drop]",
+    "pattern": "Removing first N characters from string, like slice(n) or substring(n) in other languages"
+  },
+  {
+    "module": "LString",
+    "name": "len_pos",
+    "type": "theorem",
+    "signature": "val len_pos : LChar.t list -> bool",
+    "doc": "The length of a string is always non-negative",
+    "pattern": null
+  },
+  {
+    "module": "LString",
+    "name": "len_zero_inversion",
+    "type": "theorem",
+    "signature": "val len_zero_inversion : LChar.t list -> bool",
+    "doc": "If the length of a string is zero, then the string is empty",
+    "pattern": null
+  },
+  {
+    "module": "",
+    "name": "--",
+    "type": "function",
+    "signature": "val -- : int list -> int list -> int list",
+    "doc": "Alias to {!List.(--)}\n- Note: `end` is not included in the generated list of `(start -- end)`.\n- Example: `(1--3) (* gives [1;2] *)`",
+    "pattern": "Integer range generation"
+  },
+  {
+    "module": "List",
+    "name": "--",
+    "type": "function",
+    "signature": "val (--) : int -> int -> int list",
+    "doc": "Infix operator alias for [List.range]\n- Note: `end` is not included in the generated list of `(start -- end)`.\n- Example: `List.(--) 1 3 (* gives [1;2] *)`",
+    "pattern": "Infix syntax for integer ranges"
+  }
+]

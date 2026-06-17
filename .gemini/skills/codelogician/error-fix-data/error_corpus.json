@@ -1,0 +1,533 @@
+{
+  "$schema": "./error_corpus_schema.json",
+  "items": [
+    {
+      "name": "measure_ordinal_type_mismatch",
+      "id": "019a0286-44a9-7900-927e-f307d9c1a59c",
+      "created_at": "2025-10-20T16:49:05.193889+00:00",
+      "kind": "TypeErr",
+      "msg_str": "Expression is expected to have type `Ordinal.t`,\nbut its inferred type is `int`.",
+      "tags": [],
+      "repro_iml": "type action = Identity | Increment | Decrement\n\nlet apply_action (act : action) (x : int) : int =\n  match act with\n  | Identity -> x\n  | Increment -> x + 1\n  | Decrement -> x - 1\n\nlet process_actions_measure (actions : action list) (state : int) : int =\n  List.length actions\n\nlet rec process_actions (actions : action list) (state : int) : int =\n  match actions with\n  | [] -> state\n  | act :: rest ->\n      let new_state = apply_action act state in\n      process_actions rest new_state\n[@@measure process_actions_measure actions state]\n",
+      "err_msg": {
+        "msg": "Expression is expected to have type `Ordinal.t`,\nbut its inferred type is `int`.",
+        "locs": [
+          {
+            "file": "<none>",
+            "start": {
+              "line": 18,
+              "col": 12
+            },
+            "stop": {
+              "line": 18,
+              "col": 48
+            }
+          }
+        ],
+        "backtrace": null
+      },
+      "is_po_err": false,
+      "solution": "type action = Identity | Increment | Decrement\n\nlet apply_action (act : action) (x : int) : int =\n  match act with\n  | Identity -> x\n  | Increment -> x + 1\n  | Decrement -> x - 1\n\nlet process_actions_measure (actions : action list) (state : int) : Ordinal.t =\n  Ordinal.of_int (List.length actions)\n\nlet rec process_actions (actions : action list) (state : int) : int =\n  match actions with\n  | [] -> state\n  | act :: rest ->\n      let new_state = apply_action act state in\n      process_actions rest new_state\n[@@measure process_actions_measure actions state]\n",
+      "explanation": "Termination measures in IML must return `Ordinal.t`, not `int`. The `[@@measure ...]`\nattribute expects a function that returns an ordinal value to prove well-founded recursion.\n",
+      "solution_description": "Wrap the measure function's return value with `Ordinal.of_int` to convert int to Ordinal.t.\n"
+    },
+    {
+      "name": "function_list_first_order_violation",
+      "id": "019a0286-469d-7671-b131-f20ac5694e07",
+      "created_at": "2025-10-20T16:49:05.693916+00:00",
+      "kind": "ValidationError",
+      "msg_str": "Function definition is not valid:\nFunctions must return a first-order type,\nbut `ls_f` returns `(int -> int) list`",
+      "tags": [],
+      "repro_iml": "let f (x : int) : int = x + 1\n\nlet ls_f = [f; f; f]\n",
+      "err_msg": {
+        "msg": "Function definition is not valid:\nFunctions must return a first-order type,\nbut `ls_f` returns `(int -> int) list`",
+        "locs": [
+          {
+            "file": "<none>",
+            "start": {
+              "line": 3,
+              "col": 1
+            },
+            "stop": {
+              "line": 3,
+              "col": 20
+            }
+          }
+        ],
+        "backtrace": null
+      },
+      "is_po_err": false,
+      "solution": "let f (x : int) : int = x + 1\n\ntype action =\n  | AddOne\n  | AddTwo\n  | AddThree\n\nlet apply_action (act : action) (x : int) : int =\n  match act with\n  | AddOne -> x + 1\n  | AddTwo -> x + 2\n  | AddThree -> x + 3\n\nlet ls_actions = [AddOne; AddOne; AddOne]\n",
+      "explanation": "IML enforces a first-order type restriction: functions cannot be elements of composite types\n(lists, tuples, records, or algebraic data types). This is required for the formal semantics\nand automated reasoning capabilities.\n",
+      "solution_description": "Use an algebraic data type to represent different actions instead of storing functions.\n"
+    },
+    {
+      "name": "max_int_not_available",
+      "id": "019a0286-48af-7942-b19e-005ff59f2214",
+      "created_at": "2025-10-20T16:49:06.223739+00:00",
+      "kind": "TypeErr",
+      "msg_str": "Unknown identifier \"max_int\".",
+      "tags": [],
+      "repro_iml": "let clamp (x : int) : int =\n  if x > max_int then\n    max_int\n  else\n    x\n",
+      "err_msg": {
+        "msg": "Unknown identifier \"max_int\".",
+        "locs": [
+          {
+            "file": "<none>",
+            "start": {
+              "line": 2,
+              "col": 10
+            },
+            "stop": {
+              "line": 2,
+              "col": 16
+            }
+          }
+        ],
+        "backtrace": null
+      },
+      "is_po_err": false,
+      "solution": "let max_allowed = 1000000\n\nlet clamp (x : int) : int =\n  if x > max_allowed then\n    max_allowed\n  else\n    x\n",
+      "explanation": "IML integers have arbitrary precision, so there is no built-in `max_int` constant.\nUnlike OCaml which has bounded integers, IML can represent arbitrarily large integers.\n",
+      "solution_description": "Use a specific constant for your use case.\n",
+      "solution_description_2": "Make max_int opaque if it's externally defined.\n",
+      "solution_2": "let max_int : int = () [@@opaque]\n\nlet clamp (x : int) : int =\n  if x > max_int then\n    max_int\n  else\n    x\n"
+    },
+    {
+      "name": "let_star_binding_not_in_scope",
+      "id": "019a0286-4a9d-7863-a315-8526247455d1",
+      "created_at": "2025-10-20T16:49:06.717731+00:00",
+      "kind": "TypeErr",
+      "msg_str": "Unknown identifier \"let*\".",
+      "tags": [],
+      "repro_iml": "let process_options (x : int option) (y : int option) : int option =\n  let* x_val = x in\n  let* y_val = y in\n  Some (x_val + y_val)\n",
+      "err_msg": {
+        "msg": "Unknown identifier \"let*\".",
+        "locs": [
+          {
+            "file": "<none>",
+            "start": {
+              "line": 2,
+              "col": 3
+            },
+            "stop": {
+              "line": 2,
+              "col": 6
+            }
+          }
+        ],
+        "backtrace": null
+      },
+      "is_po_err": false,
+      "solution": "let process_options (x : int option) (y : int option) : int option =\n  let open Option in\n  let* x_val = x in\n  let* y_val = y in\n  Some (x_val + y_val)\n",
+      "explanation": "The `let*` binding operator is part of the Option module but not available globally.\nIt needs to be brought into scope by opening the Option module or using qualified syntax.\n",
+      "solution_description": "Open the Option module to use let* binding operator.\n",
+      "solution_description_2": "Use explicit Option.flat_map.\n",
+      "solution_2": "let process_options (x : int option) (y : int option) : int option =\n  Option.flat_map (fun x_val ->\n    Option.flat_map (fun y_val ->\n      Some (x_val + y_val)\n    ) y\n  ) x\n",
+      "solution_description_3": "Use >>= operator with Option module open.\n",
+      "solution_3": "let process_options (x : int option) (y : int option) : int option =\n  Option.(x >>= fun x_val ->\n  y >>= fun y_val ->\n  Some (x_val + y_val))\n"
+    },
+    {
+      "name": "real_pow_exponent_must_be_int",
+      "id": "019a0286-4c86-7fa2-8928-62fe7e2a5c40",
+      "created_at": "2025-10-20T16:49:07.206536+00:00",
+      "kind": "TypeErr",
+      "msg_str": "Application failed: expected argument of type `Int.t`\nbut got (exponent : real)",
+      "tags": [],
+      "repro_iml": "let calculate (n : int) : real =\n  let base = 2.5 in\n  let exponent = Real.of_int (n / 41670) in\n  Real.pow base exponent\n",
+      "err_msg": {
+        "msg": "Application failed: expected argument of type `Int.t`\nbut got (exponent : real)",
+        "locs": [
+          {
+            "file": "<none>",
+            "start": {
+              "line": 4,
+              "col": 3
+            },
+            "stop": {
+              "line": 4,
+              "col": 24
+            }
+          }
+        ],
+        "backtrace": null
+      },
+      "is_po_err": false,
+      "solution": "let calculate (n : int) : real =\n  let base = 2.5 in\n  let exponent = Real.of_int (n / 41670) in\n  Real.pow base (Real.to_int exponent)\n",
+      "explanation": "`Real.pow` has signature `real -> int -> real`. The exponent must be an integer, not a real.\nThis is because IML only supports integer exponentiation for exact arithmetic.\n",
+      "solution_description": "Convert the exponent back to int using Real.to_int.\n",
+      "solution_description_2": "Make a custom power function opaque for real exponents.\n",
+      "solution_2": "let real_pow : real -> real -> real = () [@@opaque]\n\nlet calculate (n : int) : real =\n  let base = 2.5 in\n  let exponent = Real.of_int (n / 41670) in\n  real_pow base exponent\n"
+    },
+    {
+      "name": "list_fold_left2_not_available",
+      "id": "019a0286-4e78-7c71-97b3-499001b04d3f",
+      "created_at": "2025-10-20T16:49:07.704074+00:00",
+      "kind": "TypeErr",
+      "msg_str": "Unknown function `List.fold_left2`.",
+      "tags": [],
+      "repro_iml": "let sum_pairs (l1 : int list) (l2 : int list) : int =\n  List.fold_left2 (fun acc x y -> acc + x + y) 0 l1 l2\n",
+      "err_msg": {
+        "msg": "Unknown function `List.fold_left2`.",
+        "locs": [
+          {
+            "file": "<none>",
+            "start": {
+              "line": 2,
+              "col": 3
+            },
+            "stop": {
+              "line": 2,
+              "col": 17
+            }
+          }
+        ],
+        "backtrace": null
+      },
+      "is_po_err": false,
+      "solution": "let sum_pairs (l1 : int list) (l2 : int list) : int =\n  match List.map2 (fun x y -> (x, y)) l1 l2 with\n  | Error _ -> 0\n  | Ok pairs -> List.fold_left (fun acc (x, y) -> acc + x + y) 0 pairs\n",
+      "explanation": "`List.fold_left2` does not exist in IML's List module. IML has `List.map2` but not fold_left2.\n",
+      "solution_description": "Use List.map2 to create pairs first, then fold.\n",
+      "solution_description_2": "Implement custom recursive function.\n",
+      "solution_2": "let rec sum_pairs (l1 : int list) (l2 : int list) : int =\n  match l1, l2 with\n  | [], [] -> 0\n  | x :: xs, y :: ys -> x + y + sum_pairs xs ys\n  | _, _ -> 0\n"
+    },
+    {
+      "name": "real_comparison_type_mismatch",
+      "id": "019a0286-5097-75f3-a877-3ec308dd1a05",
+      "created_at": "2025-10-20T16:49:08.247610+00:00",
+      "kind": "TypeErr",
+      "msg_str": "Application failed: expected argument of type `int`\nbut got (x : real)",
+      "tags": [],
+      "repro_iml": "let some_function (x : real) : real =\n  if x > max_real then\n    max_real\n  else\n    x\n",
+      "err_msg": {
+        "msg": "Application failed: expected argument of type `int`\nbut got (x : real)",
+        "locs": [
+          {
+            "file": "<none>",
+            "start": {
+              "line": 2,
+              "col": 6
+            },
+            "stop": {
+              "line": 2,
+              "col": 17
+            }
+          }
+        ],
+        "backtrace": null
+      },
+      "is_po_err": false,
+      "solution": "let max_real_bound = 1000000.0\n\nlet some_function (x : real) : real =\n  if x >. max_real_bound then\n    max_real_bound\n  else\n    x\n",
+      "explanation": "Two issues: (1) `max_real` is not a built-in constant in IML, and (2) the comparison\noperator `>` is for integers. Real comparison requires different operators like `>.`,\n`<.`, `>=.`, `<=.` (though the standard operators now work for reals too).\n",
+      "solution_description": "Define a specific bound and use real comparison operator.\n",
+      "solution_description_2": "Make max_real opaque and use >= which works for reals.\n",
+      "solution_2": "let max_real : real = () [@@opaque]\n\nlet some_function (x : real) : real =\n  if x >= max_real then\n    max_real\n  else\n    x\n"
+    },
+    {
+      "name": "array_not_available",
+      "id": "019a0286-5277-7a42-80ff-597ed7177408",
+      "created_at": "2025-10-20T16:49:08.727099+00:00",
+      "kind": "TypeErr",
+      "msg_str": "Unknown identifier `Array.make`.",
+      "tags": [],
+      "repro_iml": "let example () =\n  let arr = Array.make 5 0 in\n  arr\n",
+      "err_msg": {
+        "msg": "Unknown identifier `Array.make`.",
+        "locs": [
+          {
+            "file": "<none>",
+            "start": {
+              "line": 2,
+              "col": 13
+            },
+            "stop": {
+              "line": 2,
+              "col": 22
+            }
+          }
+        ],
+        "backtrace": null
+      },
+      "is_po_err": false,
+      "solution": "(* Use list instead of Array *)\nlet example () =\n  let arr = List.mapi (fun _ _ -> 0) (0 -- 5) in\n  arr",
+      "explanation": "Arrays are mutable data structures and not available in IML, which is a pure functional\nlanguage without mutable state. All operations must be immutable.\n",
+      "solution_description": "Use immutable lists with functional updates instead of arrays.\n"
+    },
+    {
+      "name": "option_map2_not_available",
+      "id": "019a0286-5493-71c3-b4ef-40da25773fc8",
+      "created_at": "2025-10-20T16:49:09.267802+00:00",
+      "kind": "TypeErr",
+      "msg_str": "Unknown function `Option.map2`.",
+      "tags": [],
+      "repro_iml": "let add_options (x : int option) (y : int option) : int option =\n  Option.map2 (fun a b -> a + b) x y\n",
+      "err_msg": {
+        "msg": "Unknown function `Option.map2`.",
+        "locs": [
+          {
+            "file": "<none>",
+            "start": {
+              "line": 2,
+              "col": 3
+            },
+            "stop": {
+              "line": 2,
+              "col": 13
+            }
+          }
+        ],
+        "backtrace": null
+      },
+      "is_po_err": false,
+      "solution": "let add_options (x : int option) (y : int option) : int option =\n  Option.monoid_product x y |> Option.map (fun (a, b) -> a + b)\n",
+      "explanation": "`Option.map2` does not exist in IML's Option module. Use `Option.monoid_product`\nor monadic composition instead.\n",
+      "solution_description": "Use Option.monoid_product with map.\n",
+      "solution_description_2": "Use let+ and and+ operators.\n",
+      "solution_2": "let add_options (x : int option) (y : int option) : int option =\n  let open Option in\n  let+ a = x\n  and+ b = y in\n  a + b\n",
+      "solution_description_3": "Use flat_map for monadic composition.\n",
+      "solution_3": "let add_options (x : int option) (y : int option) : int option =\n  Option.flat_map (fun a ->\n    Option.map (fun b -> a + b) y\n  ) x\n"
+    },
+    {
+      "name": "min_int_not_available",
+      "id": "019a0286-566a-7653-9b5d-087b41db8c53",
+      "created_at": "2025-10-20T16:49:09.738494+00:00",
+      "kind": "TypeErr",
+      "msg_str": "Unknown identifier \"min_int\".",
+      "tags": [],
+      "repro_iml": "let clamp (x : int) : int =\n  if x < min_int then\n    min_int\n  else\n    x\n",
+      "err_msg": {
+        "msg": "Unknown identifier \"min_int\".",
+        "locs": [
+          {
+            "file": "<none>",
+            "start": {
+              "line": 2,
+              "col": 10
+            },
+            "stop": {
+              "line": 2,
+              "col": 16
+            }
+          }
+        ],
+        "backtrace": null
+      },
+      "is_po_err": false,
+      "solution": "let min_allowed = -1000000\n\nlet clamp (x : int) : int =\n  if x < min_allowed then\n    min_allowed\n  else\n    x\n",
+      "explanation": "Similar to `max_int`, IML does not have a built-in `min_int` constant because integers\nhave arbitrary precision and can be arbitrarily small (negative).\n",
+      "solution_description": "Use a specific constant.\n",
+      "solution_description_2": "Make min_int opaque if it's externally defined.\n",
+      "solution_2": "let min_int : int = () [@@opaque]\n\nlet clamp (x : int) : int =\n  if x < min_int then\n    min_int\n  else\n    x\n"
+    },
+    {
+      "name": "option_bind_not_available",
+      "id": "019a0286-5858-7b41-b195-70664dc7e57d",
+      "created_at": "2025-10-20T16:49:10.232273+00:00",
+      "kind": "TypeErr",
+      "msg_str": "Unknown function `Option.bind`.",
+      "tags": [],
+      "repro_iml": "let process (x : int option) : int option =\n  Option.bind x (fun v -> Some (v + 1))\n",
+      "err_msg": {
+        "msg": "Unknown function `Option.bind`.",
+        "locs": [
+          {
+            "file": "<none>",
+            "start": {
+              "line": 2,
+              "col": 3
+            },
+            "stop": {
+              "line": 2,
+              "col": 13
+            }
+          }
+        ],
+        "backtrace": null
+      },
+      "is_po_err": false,
+      "solution": "let process (x : int option) : int option =\n  Option.flat_map (fun v -> Some (v + 1)) x\n",
+      "explanation": "In IML, the function is called `Option.flat_map` instead of `Option.bind`. The monadic\nbind operator is available as `>>=` within the Option module.\n",
+      "solution_description": "Use Option.flat_map.\n",
+      "solution_description_2": "Use >>= operator.\n",
+      "solution_2": "let process (x : int option) : int option =\n  Option.(x >>= fun v -> Some (v + 1))\n",
+      "solution_description_3": "Use let* with open Option.\n",
+      "solution_3": "let process (x : int option) : int option =\n  let open Option in\n  let* v = x in\n  Some (v + 1)\n"
+    },
+    {
+      "name": "failwith_not_available",
+      "id": "019a0286-5a37-7750-8303-e66e4ab445dd",
+      "created_at": "2025-10-20T16:49:10.711885+00:00",
+      "kind": "TypeErr",
+      "msg_str": "Unknown identifier \"failwith\".",
+      "tags": [],
+      "repro_iml": "let divide (x : int) (y : int) : int =\n  if y = 0 then\n    failwith \"Division by zero\"\n  else\n    x / y\n",
+      "err_msg": {
+        "msg": "Unknown identifier \"failwith\".",
+        "locs": [
+          {
+            "file": "<none>",
+            "start": {
+              "line": 3,
+              "col": 5
+            },
+            "stop": {
+              "line": 3,
+              "col": 12
+            }
+          }
+        ],
+        "backtrace": null
+      },
+      "is_po_err": false,
+      "solution": "let divide (x : int) (y : int) : int option =\n  if y = 0 then\n    None\n  else\n    Some (x / y)\n",
+      "explanation": "IML is a pure language without exceptions. The `failwith` function from OCaml is not\navailable. Error handling must use `Option` or `Result` types instead.\n",
+      "solution_description": "Return an option type with None for error cases.\n",
+      "solution_description_2": "Return a Result type with error message.\n",
+      "solution_2": "let divide (x : int) (y : int) : (int, string) result =\n  if y = 0 then\n    Error \"Division by zero\"\n  else\n    Ok (x / y)\n",
+      "solution_description_3": "Return a sentinel value (changes function signature semantics).\n",
+      "solution_3": "let divide (x : int) (y : int) : int =\n  if y = 0 then\n    0\n  else\n    x / y\n"
+    },
+    {
+      "name": "ref_not_available",
+      "id": "019a0286-5c27-7142-98f6-2ab8790eb27a",
+      "created_at": "2025-10-20T16:49:11.207341+00:00",
+      "kind": "TypeErr",
+      "msg_str": "Unknown identifier \"ref\".",
+      "tags": [],
+      "repro_iml": "let counter () =\n  let count = ref 0 in\n  count := !count + 1;\n  !count\n",
+      "err_msg": {
+        "msg": "Unknown identifier \"ref\".",
+        "locs": [
+          {
+            "file": "<none>",
+            "start": {
+              "line": 2,
+              "col": 15
+            },
+            "stop": {
+              "line": 2,
+              "col": 17
+            }
+          }
+        ],
+        "backtrace": null
+      },
+      "is_po_err": false,
+      "solution": "let counter (count : int) : int =\n  count + 1\n",
+      "explanation": "References (`ref`) are mutable state and not available in IML, which is purely functional.\nAll state changes must be explicit through function parameters and return values.\n",
+      "solution_description": "Use a parameter to track state.\n",
+      "solution_description_2": "Use recursion for stateful computation.\n",
+      "solution_2": "let rec count_up_to (n : int) (current : int) : int =\n  if current >= n then\n    current\n  else\n    count_up_to n (current + 1)\n",
+      "solution_description_3": "Return the new state explicitly.\n",
+      "solution_3": "let increment (count : int) : int =\n  count + 1\n\nlet counter () : int =\n  let count = 0 in\n  let count = increment count in\n  count\n"
+    },
+    {
+      "name": "monadic_binding_pattern_match",
+      "id": "019a069f-342d-7552-81b7-2ea9275da9b7",
+      "created_at": "2025-10-21T11:54:48.237787+00:00",
+      "kind": "TypeErr",
+      "msg_str": "Unknown identifier \"let*\".",
+      "tags": [],
+      "repro_iml": "type order_type = Market | Limit\n\ntype order = {\n  order_type : order_type;\n  order_price : real;\n}\n\ntype order_book = {\n  buy_orders : order list;\n}\n\nlet next_buy (ob : order_book) : order option =\n  List.nth 0 ob.buy_orders\n\nlet ob : order_book = {\n  buy_orders = [{order_type = Market; order_price = 100.0}];\n}\n\nlet b_bid =\n  let* next = next_buy ob in\n  if next.order_type <> Market then\n    Some next.order_price\n  else\n    None\n",
+      "err_msg": {
+        "msg": "Unknown identifier \"let*\".",
+        "locs": [
+          {
+            "file": "<none>",
+            "start": {
+              "line": 20,
+              "col": 3
+            },
+            "stop": {
+              "line": 20,
+              "col": 6
+            }
+          }
+        ],
+        "backtrace": null
+      },
+      "is_po_err": false,
+      "solution": "type order_type = Market | Limit\n\ntype order = {\n  order_type : order_type;\n  order_price : real;\n}\n\ntype order_book = {\n  buy_orders : order list;\n}\n\nlet next_buy (ob : order_book) : order option =\n  List.nth 0 ob.buy_orders\n\nlet ob : order_book = {\n  buy_orders = [{order_type = Market; order_price = 100.0}];\n}\n\nlet b_bid =\n  match next_buy ob with\n  | Some next ->\n    if next.order_type <> Market then\n      Some next.order_price\n    else\n      None\n  | None -> None\n",
+      "explanation": "The `let*` binding operator is not available globally in IML. It must be brought into\nscope by opening the appropriate module (Option, Result, etc.).\n",
+      "solution_description": "Replace monadic binding with explicit pattern matching.\n"
+    },
+    {
+      "name": "real_comparison_operators",
+      "id": "019a069f-39b7-7be1-91f6-ec2ad7c3b7ba",
+      "created_at": "2025-10-21T11:54:49.655241+00:00",
+      "kind": "TypeErr",
+      "msg_str": "Application failed: expected argument of type `int`\nbut got (price : real)",
+      "tags": [],
+      "repro_iml": "let price : real = 10.5\nlet threshold : real = 5.0\nlet max_price : real = 100.0\n\nlet result =\n  if price < threshold then\n    Some price\n  else if price > max_price then\n    Some max_price\n  else\n    None\n",
+      "err_msg": {
+        "msg": "Application failed: expected argument of type `int`\nbut got (price : real)",
+        "locs": [
+          {
+            "file": "<none>",
+            "start": {
+              "line": 6,
+              "col": 6
+            },
+            "stop": {
+              "line": 6,
+              "col": 22
+            }
+          }
+        ],
+        "backtrace": null
+      },
+      "is_po_err": false,
+      "solution": "let price : real = 10.5\nlet threshold : real = 5.0\nlet max_price : real = 100.0\n\nlet result =\n  if Real.(<) price threshold then\n    Some price\n  else if Real.(>) price max_price then\n    Some max_price\n  else\n    None\n",
+      "explanation": "IML's standard comparison operators (<, >, <=, >=) are typed for integers by default.\nUsing them on real numbers causes a type error. The Real module provides separate\ncomparison operators for real numbers.\n",
+      "solution_description": "Use Real module comparison operators: Real.(<), Real.(>), Real.(<=), Real.(>=).\n"
+    },
+    {
+      "name": "termination_measure_annotation",
+      "id": "019a069f-3ecb-7183-a8cc-588240d67b97",
+      "created_at": "2025-10-21T11:54:50.955957+00:00",
+      "kind": "TacticEvalErr",
+      "msg_str": "Tactic failed: Goal is counter-satisfiable.",
+      "tags": [],
+      "repro_iml": "let rec left_pad c n xs =\n  if List.length xs >= n then\n    xs\n  else\n    left_pad c n (c :: xs)\n",
+      "err_msg": {
+        "msg": "Tactic failed: Goal is counter-satisfiable.",
+        "locs": [],
+        "backtrace": "Raised at Stdlib__Hashtbl.MakeSeeded.find in file \"hashtbl.ml\", line 391, characters 17-32\nCalled from Imandrax_api__HashtblCache.Make.cached in file \"vendor/imandrax-api/src/core/HashtblCache.ml\", line 11, characters 10-22\n"
+      },
+      "is_po_err": true,
+      "solution": "let left_pad_measure n xs =\n  Ordinal.of_int (n - List.length xs)\n\nlet rec left_pad c n xs =\n  if List.length xs >= n then\n    xs\n  else\n    left_pad c n (c :: xs)\n[@@measure left_pad_measure n xs]\n",
+      "explanation": "IML cannot automatically prove termination when the recursion pattern is non-standard\n(e.g., recursion on list length rather than list structure). An explicit measure\nannotation is required to show what decreases with each recursive call.\n",
+      "solution_description": "Add [@@measure ...] annotation with a function returning Ordinal.t that provably\ndecreases on each recursive call.\n"
+    },
+    {
+      "name": "polymorphic_closure_type_mismatch",
+      "id": "019cc346-6158-7023-b5f5-6d2af0a7aefa",
+      "created_at": "2026-03-06T13:11:35.512293+00:00",
+      "kind": "TypeErr",
+      "msg_str": "Application failed: expected argument of type `file_section list`\nbut got (r.partitions : data_partition list)",
+      "tags": [],
+      "repro_iml": "type data_partition = {\n  partition_name : LString.t;\n  is_visible : bool;\n}\n\ntype file_section = {\n  section_name : LString.t;\n  is_visible : bool;\n}\n\ntype report = {\n  partitions : data_partition list;\n  sections : file_section list;\n}\n\nlet get_visible_sections (r : report) : file_section list =\n  List.filter (fun s -> s.is_visible) r.sections\n\nlet get_visible_partitions (r : report) : data_partition list =\n  List.filter (fun p -> p.is_visible) r.partitions\n",
+      "err_msg": {
+        "msg": "Application failed: expected argument of type `file_section list`\nbut got (r.partitions : data_partition list)",
+        "locs": [
+          {
+            "file": "<none>",
+            "start": {
+              "line": 20,
+              "col": 3
+            },
+            "stop": {
+              "line": 20,
+              "col": 50
+            }
+          }
+        ],
+        "backtrace": null
+      },
+      "is_po_err": false,
+      "solution": "type data_partition = {\n  partition_name : LString.t;\n  is_visible : bool;\n}\n\ntype file_section = {\n  section_name : LString.t;\n  is_visible : bool;\n}\n\ntype report = {\n  partitions : data_partition list;\n  sections : file_section list;\n}\n\nlet get_visible_sections (r : report) : file_section list =\n  List.filter (fun (s : file_section) -> s.is_visible) r.sections\n\nlet get_visible_partitions (r : report) : data_partition list =\n  List.filter (fun (p : data_partition) -> p.is_visible) r.partitions\n",
+      "explanation": "When List.filter, List.map, or other higher-order List functions are used multiple\ntimes in the same file with lambdas at different types, IML's type inference can fail\nto resolve the polymorphic closure type. The lambda parameter gets inferred as the\nwrong type from a previous usage of the same higher-order function.\n",
+      "solution_description": "Add explicit type annotations to all lambda parameters in higher-order function calls.\nFor example, change `List.filter (fun x -> x.is_active) items` to\n`List.filter (fun (x : item) -> x.is_active) items`.\n"
+    }
+  ]
+}

@@ -184,10 +184,11 @@ decomposition, verify a property, generate tests, or a combination):
 5. Map the results back to the original source and report findings.
 
 ## Reference (authoritative — use it, don't work from memory)
-The CodeLogician CLI ships the canonical IML/ImandraX documentation. Treat it as the source of truth, not the condensed notes below.
-- **Once per task**, run \`codelogician doc dump .imandra/skill\` (skip if \`.imandra/skill\` already exists), then read the guides relevant to what you're doing: \`SKILL.md\` and \`iml-syntax.md\` before writing any IML, \`verification-with-verify-and-instance.md\` for \`verify\`/\`instance\`, \`region-decomp-intro.md\` for \`[@@decomp]\`, and the \`error-fix-data/\` corpus when ImandraX reports an error.
-- For targeted lookups (syntax, prelude signatures, a specific error → fix), use \`codelogician doc search "<query>"\`.
-- The "IML essentials" section below is only a fast-start summary; when in doubt, defer to the dumped docs (they are version-matched to the installed CLI).
+The canonical IML/ImandraX documentation ships with this CLI as a skill. Treat it as the source of truth, not the condensed notes below.
+- **Read the local skill docs in \`.gemini/skills/codelogician/\`** (relative to the project root) for what you're doing: \`SKILL.md\` and \`iml-syntax.md\` before writing any IML, \`verification-with-verify-and-instance.md\` for \`verify\`/\`instance\`, \`region-decomp-intro.md\` for \`[@@decomp]\`, \`reference/\` (tactics, prelude signatures) for APIs, and \`error-fix-data/\` when ImandraX reports an error.
+- If that directory is absent (e.g. running outside this repo), run \`codelogician doc dump .imandra/skill\` once and read from there instead.
+- For quick targeted lookups, use \`codelogician doc search "<query>"\`.
+- The "IML essentials" section below is only a fast-start summary; defer to the skill docs when in doubt.
 
 ## Workflow (follow strictly)
 1. **Understand**: read the target file(s) and identify the function(s) and the properties/behaviors of interest. If the user gave a property, restate it precisely. If asked to decompose, identify which function's state-space matters.

@@ -97,7 +97,7 @@ powerful tool for developers.
 
 ## Reasoning about code with Imandra / CodeLogician
 
-This project ships an `formalreasoning` subagent (backed by the `codelogician`
+This project ships a `formalreasoning` subagent (backed by the `codelogician`
 tool / `codelogician-lite` CLI). It reasons about code mathematically and is
 valuable for **two** things: _understanding_ what code does and _verifying_ that
 it is correct.

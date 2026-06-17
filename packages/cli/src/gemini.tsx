@@ -38,6 +38,7 @@ import {
   getProjectHash,
   loadConversationRecord,
   type MessageRecord,
+  ensureCodelogicianInstalled,
 } from '@google/gemini-cli-core';
 
 import { loadCliConfig, parseArguments } from './config/config.js';
@@ -783,6 +784,11 @@ export async function main() {
         writeToStderr(warning.message + '\n');
       }
     }
+
+    // Ensure the CodeLogician CLI is installed BEFORE config.initialize() (here
+    // for non-interactive, inside startInteractiveUI for interactive) so the
+    // formalreasoning agent + codelogician tool register in this same session.
+    ensureCodelogicianInstalled();
 
     // Render UI, passing necessary config values. Check that there is no command line question.
     if (config.isInteractive()) {

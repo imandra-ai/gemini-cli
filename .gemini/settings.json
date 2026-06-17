@@ -13,20 +13,6 @@
     "devtools": true
   },
   "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "startup",
-        "hooks": [
-          {
-            "name": "codelogician-install",
-            "type": "command",
-            "description": "On startup, install the CodeLogician CLI if it is missing.",
-            "command": "$GEMINI_PROJECT_DIR/.gemini/hooks/codelogician-install.sh",
-            "timeout": 120000
-          }
-        ]
-      }
-    ],
     "AfterTool": [
       {
         "matcher": "write_file|replace",

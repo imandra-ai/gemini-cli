@@ -75,9 +75,15 @@ powerful tool for developers.
   [Conventional Commits](https://www.conventionalcommits.org/) standard.
 - **Imports:** Use specific imports and avoid restricted relative imports
   between packages (enforced by ESLint).
-- **License Headers:** For all new source code files (`.ts`, `.tsx`, `.js`),
-  include the Apache-2.0 license header with the current year. (e.g.,
-  `Copyright 2026 Google LLC`). This is enforced by ESLint.
+- **License Headers:**
+  - **gemini-cli's own source** (`.ts`, `.tsx`, `.js` in this repo): include the
+    Apache-2.0 header with the current year (`Copyright <year> Google LLC` +
+    `SPDX-License-Identifier: Apache-2.0`). This is a license requirement and is
+    enforced by ESLint — do not change it.
+  - **Code you generate for the user** (e.g. `.iml`, `.py`, scripts in their own
+    project — anything that is NOT a gemini-cli source file): do **not** use
+    Google's notice. Use `Copyright <current year> Imandra, Inc.` in the file's
+    comment syntax, or omit a header for throwaway snippets.
 
 ## Testing Conventions
 

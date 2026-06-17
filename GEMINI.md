@@ -102,11 +102,13 @@ tool / `codelogician-lite` CLI). It reasons about code mathematically and is
 valuable for **two** things: _understanding_ what code does and _verifying_ that
 it is correct.
 
-**This is a hard requirement, not a suggestion:** whenever you write or modify
-code that contains non-trivial program logic, you **MUST** delegate to the
-`formalreasoning` subagent before you consider the task done. Do **not** ask the
-user for permission first, and do **not** stop at running the code or writing
-hand-rolled tests — invoke `formalreasoning` as a normal step of the work.
+**When you write or substantially change a non-trivial piece of program logic,
+delegate to the `formalreasoning` subagent once — after that logic has settled —
+to understand it (region decomposition) and verify the properties that matter.**
+Use judgment about _timing and frequency_: do it a single time per
+logically-complete change, **not** after every intermediate edit, and not as a
+reflex on small tweaks. You don't need to ask permission; just invoke it when it
+genuinely adds value.
 
 - **Region decomposition for understanding & tests (use this generously).**
   CodeLogician's region decomposition enumerates a function's disjoint
@@ -119,17 +121,17 @@ hand-rolled tests — invoke `formalreasoning` as a normal step of the work.
   - **Generate high-coverage tests** — derive one test per region (Python /
     TypeScript) so coverage tracks the real control/data flow, not guessed
     inputs. Prefer this over hand-written tests for logic-heavy functions.
-- **Verification for correctness.** You MUST also delegate when a change affects
-  logic that _must_ hold — algorithms, state machines, arithmetic/money,
-  parsing, access control, invariants, edge cases. You get a proof or a concrete
+- **Verification for correctness.** Also delegate when a change affects logic
+  that _must_ hold — algorithms, state machines, arithmetic/money, parsing,
+  access control, invariants, edge cases. You get a proof or a concrete
   counterexample instead of a statistical guess.
-- **The only exception** is purely cosmetic or subjective work — styling,
+- **The only "never" cases** are purely cosmetic or subjective work — styling,
   colors, layout, copy, formatting, comments, logging, or "which option looks
   nicer". There is nothing to understand or verify there, so don't invoke it.
-- **Don't over-invoke within that rule.** One focused decomposition/verification
-  on the function that actually matters beats blanket runs; if a change is
-  trivial or has no checkable behavior, skip it. But when real logic is
-  involved, running `formalreasoning` is mandatory, not optional.
-- The `AfterTool` hook (`.gemini/hooks/imandra-nudge.sh`) will remind you after
-  source edits; treat that reminder as a direct instruction to invoke
-  `formalreasoning` on the logic you just changed.
+- **Don't over-invoke.** One focused decomposition/verification on the function
+  that actually matters, run once the logic is settled, beats blanket runs.
+  Re-running on every intermediate edit, or on trivial changes, is noise — avoid
+  it.
+- The `AfterTool` hook (`.gemini/hooks/imandra-nudge.sh`) may remind you after a
+  source edit; treat it as a prompt to delegate **once** if you haven't already
+  analyzed this change — not as an instruction to run on every edit.

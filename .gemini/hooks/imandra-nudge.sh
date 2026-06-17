@@ -50,21 +50,28 @@ case "$file" in
   *) emit_noop ;;
 esac
 
-# Inject the directive. The model still decides relevance: it should only invoke
-# Imandra when the change affects behavior/correctness, not styling or copy.
+# Throttle: nudge at most once per file per session, so iterative editing of the
+# same file does not re-trigger formal reasoning on every save.
+sess="${GEMINI_SESSION_ID:-nosession}"
+marker_dir="${TMPDIR:-/tmp}/codelogician-nudge-${sess}"
+key="$(printf '%s' "$file" | tr -c 'a-zA-Z0-9' '_')"
+marker="${marker_dir}/${key}"
+[ -e "$marker" ] && emit_noop
+mkdir -p "$marker_dir" 2>/dev/null || true
+: >"$marker" 2>/dev/null || true
+
+# Inject the directive. The model still decides relevance and timing: delegate
+# ONCE, after the logic is settled — not on every intermediate edit.
 node -e '
 const f = process.argv[1];
 const msg =
-  `You just edited \`${f}\`. If this change affects program logic or behavior ` +
-  `(algorithms, state machines, arithmetic/money, parsing, access control, ` +
-  `invariants, edge-case handling), you MUST delegate to the \`formalreasoning\` subagent ` +
-  `NOW — before writing tests, before running the code, and before concluding ` +
-  `this task. Do NOT ask the user whether to use it; just invoke it. Use it to ` +
-  `(1) UNDERSTAND what the code you just wrote actually does via region ` +
-  `decomposition (read the per-region behavior to confirm every branch/boundary ` +
-  `is handled), (2) generate high-coverage tests from those regions, and (3) ` +
-  `verify any property that must hold (getting a concrete counterexample if it ` +
-  `fails). The ONLY exception is a purely cosmetic or subjective change (styling, ` +
-  `colors, copy, formatting, comments, logging) — for those, do nothing.`;
+  `You edited \`${f}\`. Once you have finished a non-trivial piece of program ` +
+  `logic here (algorithms, state machines, arithmetic/money, parsing, access ` +
+  `control, invariants, edge cases), delegate ONCE to the \`formalreasoning\` ` +
+  `subagent to understand it via region decomposition and verify the properties ` +
+  `that matter (it returns concrete counterexamples). Do this a single time, ` +
+  `after the logic has settled — not after every intermediate edit, and not for ` +
+  `trivial changes. Skip it entirely for cosmetic/subjective work (styling, ` +
+  `colors, copy, formatting, comments, logging).`;
 process.stdout.write(JSON.stringify({ hookSpecificOutput: { additionalContext: msg } }));
 ' "$file"
